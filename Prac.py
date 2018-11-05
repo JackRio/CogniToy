@@ -8,3 +8,4 @@ result = c.mycursor.fetchall()
 for c_name in result:
 	
 	
+print("Just for fun")
