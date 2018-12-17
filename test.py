@@ -1,3 +1,14 @@
+from Connector import Connector as c
+import random
+
+c.mycursor.execute("SELECT * from riddle")
+result = c.mycursor.fetchall()
+
+num = random.randint(0,len(result)-1)
+
+print(result[num][0])
+
+
 """Build in python function https://docs.python.org/3/library/functions.html"""
 
 
