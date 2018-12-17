@@ -3,6 +3,9 @@ from Connector import Connector as c
 from Global import Global as g
 from Details import Details as d
 import random
+from flask import Flask
+app = Flask(__name__)
+
 
 service = watson_developer_cloud.AssistantV2(
   username = d.username, 
@@ -12,8 +15,8 @@ service = watson_developer_cloud.AssistantV2(
 assistant_id = d.assistant_id
 
 session_id = service.create_session(
-	assistant_id = assistant_id
-	).get_result()['session_id']
+ 	assistant_id = assistant_id
+ 	).get_result()['session_id']
 
 def askRiddle(response):
 	c.mycursor.execute("SELECT * from riddle")
@@ -24,20 +27,19 @@ def askRiddle(response):
 	response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
 	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
 
-
-
 def checkTag(response):
 	if response['context']['skills']['main skill']['user_defined']['tag'] in g.tag:
 		if response['context']['skills']['main skill']['user_defined']['tag'] == 'riddle':
 			askRiddle(response)
 
-while not g.end_conv:
 
+@app.route('/conv/<sentence>')
+def conversation(sentence):
 	response = service.message(
 		assistant_id,
 		session_id,
 		input = {
-			'text': g.user_input,
+			'text': sentence,
 			'options': {
             	'return_context': True
         	}
@@ -46,22 +48,33 @@ while not g.end_conv:
         context = g.context
 	).get_result()
 
-	if response['context']['skills']['main skill']['user_defined']['end'] == 'end_conversation': #Conversation ends here
-		for ele in response['output']['generic']:
-			if ele['response_type'] == 'text':
-				print(ele['text'])
-		g.end_conv = True
-
-	elif response['output']['generic']:    # printing response
-		g.context = response['context']
-		for ele in response['output']['generic']:
-			if ele['response_type'] == 'text':
-				print(ele['text'])
-		g.user_input = input('>> ')
-
+	# if response['context']['skills']['main skill']['user_defined']['end'] == 'end_conversation': #Conversation ends here
+	# 	g.end_conv = True
+	# 	for ele in response['output']['generic']:
+	# 		if ele['response_type'] == 'text':
+	# 			return ele['text']
+	
 	checkTag(response)
-  
-service.delete_session(
-	assistant_id = assistant_id,
-	session_id = session_id
-)
+
+
+	res = ''
+	g.context = response['context']
+	for ele in response['output']['generic']:
+		if ele['response_type'] == 'text':
+			res += ele['text']
+	return res
+	
+	
+	# if not g.end_conv:
+	# 	conversation()
+
+# if __name__ == '__main__':
+# 	conversation()
+
+if __name__ == '__main__':
+	app.run(debug = True,port = 8000)
+
+	service.delete_session(
+		assistant_id = assistant_id,
+		session_id = session_id
+	)
