@@ -1,14 +1,15 @@
-from Connector import Connector as c
-import random
+def rotLeft(a, d):
+    arr = []
+    while d <= len(a)-1:
+        arr.append(a[d])
+        a.pop(d)
+    d = 0
+    while d in range(len(a)):
+        arr.append(a[d])
+    return arr
 
-c.mycursor.execute("SELECT * from riddle")
-result = c.mycursor.fetchall()
-
-num = random.randint(0,len(result)-1)
-
-print(result[num][0])
-
-
+a = [1,2,3,4,5,6,7,8,9]
+rotLeft(a,5)
 """Build in python function https://docs.python.org/3/library/functions.html"""
 
 
