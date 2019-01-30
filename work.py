@@ -1,22 +1,23 @@
 import watson_developer_cloud
-from Connector import Connector as c
+import random
 from Global import Global as g
 from Details import Details as d
-import random
-from flask import Flask
-app = Flask(__name__)
+from flask import Flask, request
+from flask_cors import CORS
 
+app = Flask(__name__)
+CORS(app)
 
 service = watson_developer_cloud.AssistantV2(
-  username = d.username, 
-  password = d.password,
-  version = d.version
+	username = d.username, 
+	password = d.password,
+	version = d.version
 )
 assistant_id = d.assistant_id
 
 session_id = service.create_session(
- 	assistant_id = assistant_id
- 	).get_result()['session_id']
+	assistant_id = assistant_id
+	).get_result()['session_id']
 
 def askRiddle(response):
 	c.mycursor.execute("SELECT * from riddle")
@@ -33,46 +34,34 @@ def checkTag(response):
 			askRiddle(response)
 
 
-@app.route('/conv/<sentence>')
-def conversation(sentence):
+@app.route('/conversation', methods = ['POST'])
+def conversation():
+	query = request.get_json()
+	sentence = query['question']
 	response = service.message(
 		assistant_id,
 		session_id,
 		input = {
 			'text': sentence,
 			'options': {
-            	'return_context': True
-        	}
-
-        },
-        context = g.context
+				'return_context': True
+			}
+		},
+		context = g.context
 	).get_result()
 
-	# if response['context']['skills']['main skill']['user_defined']['end'] == 'end_conversation': #Conversation ends here
-	# 	g.end_conv = True
-	# 	for ele in response['output']['generic']:
-	# 		if ele['response_type'] == 'text':
-	# 			return ele['text']
-	
-	checkTag(response)
-
+	#checkTag(response)
 
 	res = ''
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text':
 			res += ele['text']
-	return res
-	
-	
-	# if not g.end_conv:
-	# 	conversation()
 
-# if __name__ == '__main__':
-# 	conversation()
+	return res
 
 if __name__ == '__main__':
-	app.run(debug = True,port = 8000)
+	app.run(debug = True)
 
 	service.delete_session(
 		assistant_id = assistant_id,

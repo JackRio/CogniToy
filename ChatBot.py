@@ -1,10 +1,9 @@
-import watson_developer_cloud
-from Connector import Connector as c 
+import watson_developer_cloud 
 from Global import Global as g
 from Details import Details as d
-from flask import Flask
-app = Flask(__name__)
+from flask import Flask, request
 
+app = Flask(__name__)
 
 service = watson_developer_cloud.AssistantV1(
   username = d.username, 
@@ -13,41 +12,10 @@ service = watson_developer_cloud.AssistantV1(
 )
 workspace_id = d.workspace_id
 
-# def checkDetails(response):
-#   """
-#     This function check if details of child are filled or not and if not then prompt them to fill
-#   """
-#   c.mycursor.execute("SELECT ChildName,Fill FROM PersonalDetails")
-#   result = c.mycursor.fetchall()
-
-#   for r_name, val in result:
-#     if r_name.lower() == response['context']['Name'].lower():
-#       if not val:
-#         response['context']['Details'] = True
-          
-#   response['context']['Start'] = False
-
-#   c.mycursor.execute("SELECT * FROM PersonalDetails")
-#   result = c.mycursor.fetchall()
-#   for r_name in result:
-#     if r_name[0].lower() == response['context']['Name'].lower():
-#       response['context']['FatherName'] = r_name[1]
-#       response['context']['MotherName'] = r_name[2]
-#       response['context']['Hobby'] = r_name[3]
-#       response['context']['Animal'] = r_name[4]
-#       response['context']['FatherContact'] = r_name[5]
-#       response['context']['MotherContact'] = r_name[6]
-#       response['context']['Subject'] = r_name[7]
-
-# def updateDetails(response):
-#   """
-#     This function updates the personal information provided by the child
-#   """
-#   pass
-
-@app.route('/conv/<sentence>')
-def conversation(sentence):
-
+@app.route('/conv', methods = ['POST'] )
+def conversation():
+  query = request.get_json()
+  sentence = query['question']
   response = service.message(
     workspace_id = workspace_id,
     input = {
@@ -66,15 +34,6 @@ def conversation(sentence):
     print(response['output']['generic']['text'])
     return 'Success'
 
-  
-  # if response['context']['Start']:
-  #   checkDetails(response)
-
-  # if not response['context']['Start'] and response['context']['Details']:
-  #   updateDetails(response)                                                     #Complete this Function next Task
-    
-  
-  
 if __name__ == '__main__':
   response = service.message(
     workspace_id = workspace_id,
@@ -83,8 +42,4 @@ if __name__ == '__main__':
     },
     context = g.context
   )
-  app.run(debug = True, port = 8000)
-
-   
-
-
+  app.run(debug = True)
