@@ -1,6 +1,7 @@
 import watson_developer_cloud
 import random
 from Global import Global as g
+import Connector as c
 from Details import Details as d
 from flask import Flask, request
 from flask_cors import CORS
@@ -50,7 +51,7 @@ def conversation():
 		context = g.context
 	).get_result()
 
-	#checkTag(response)
+	# checkTag(response)
 
 	res = ''
 	g.context = response['context']
