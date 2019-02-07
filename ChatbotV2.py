@@ -6,6 +6,8 @@ from Details import Details as d
 from flask import Flask, request
 from flask_cors import CORS
 
+
+
 app = Flask(__name__)
 CORS(app)
 
@@ -20,6 +22,16 @@ session_id = service.create_session(
 	assistant_id = assistant_id
 	).get_result()['session_id']
 
+
+def tag_to_func(tag,response):
+	switcher = {
+		"riddle" : askRiddle,
+		"define" : giveDefine,
+	}
+	func = switcher.get(tag,False)
+	if func:
+		return func(response)
+
 def askRiddle(response):
 
 	c.mycursor.execute("SELECT * from riddle")
@@ -29,10 +41,10 @@ def askRiddle(response):
 	response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
 	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
 
-	
-def checkTag(response):
-	if response['context']['skills']['main skill']['user_defined']['tag'] == 'riddle':
-		return askRiddle(response)
+def giveDefine(response):
+
+	answer = "Answer Found"
+	response['context']['skills']['main skill']['user_defined']['answer'] = answer
 
 @app.route('/start')
 def start():
@@ -57,8 +69,10 @@ def conversation():
 		context = g.context
 	).get_result()
 
+	
+	tag_to_func(response['context']['skills']['main skill']['user_defined']['tag'],response)
+
 	res = ''
-	checkTag(response)
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text':

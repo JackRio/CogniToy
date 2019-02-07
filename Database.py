@@ -21,5 +21,10 @@ data = pd.DataFrame(data)
 # 		if row[i+1]!= 'Na':
 # 			c.mycursor.execute(query,val)
 # 			c.mydb.commit()
-print(data[2])			
-# .to_csv('Personalities Names') 			
+
+df = []			
+for row in data.itertuples():
+	df.append(row[2])
+
+df = pd.DataFrame(df)
+df.to_csv("Names",sep=',')

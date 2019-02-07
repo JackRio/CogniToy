@@ -40,6 +40,11 @@ function appendBotChat(string) {
 	$('#textmsg').val('');
 }
 
+/*function scrollToBottom(){
+	$('.chatlogs').scrollTop = $('.chatlogs').scrollHeight;
+}*/
+
+
 function getResponse(string) {
 	$.ajax({
 		url: 'http://127.0.0.1:5000/conversation',
@@ -53,7 +58,11 @@ function getResponse(string) {
 		if(data.status == 200){
 			var dataArr = data.responseText.split('$')
 			for(var i = 0;i<dataArr.length;i++){
+				/*shouldScroll = ($('.chatlogs').scrollTop + $('.chatlogs').clientHeight === $('.chatlogs').scrollHeight);*/
 				appendBotChat(dataArr[i])
+				/*if(!shouldScroll){
+					scrollToBottom();
+				}*/
 			}
 		}
 	});

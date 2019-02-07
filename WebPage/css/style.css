@@ -21,14 +21,18 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #4F8EDB;
-    width: 150%;
+    width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
 }
 
-.Block{
-    width:100%;
+.ChildrenBlock{
+    float: left;
+}
+.ChildrenHusk{
+    float: right;
+    padding: 100px
 }
 
 .chatbox {
