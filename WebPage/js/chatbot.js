@@ -51,7 +51,24 @@ function getResponse(string) {
 		data: '{ "question" : "'+ string +'"}'
 	}).always( function(data) {
 		if(data.status == 200){
-			appendBotChat(data.responseText)
+			var dataArr = data.responseText.split('$')
+			for(var i = 0;i<dataArr.length;i++){
+				appendBotChat(dataArr[i])
+			}
 		}
 	});
 }
+
+$(window).load(function() {
+	$.ajax({
+		url: 'http://127.0.0.1:5000/start'
+	}).always( function(data) {
+		if(data != ''){
+			var dataArr = data.split('$')
+			for(var i = 0;i<dataArr.length;i++){
+				var txt = '<div class="chat bot" id="BotSection0"><div class="BotPic"><img src="img/bot.png"></div><p class="chat-message">' + dataArr[i] + '</p></div>';
+				$('.chatlogs').append(txt);
+			}
+		}
+	});
+});
