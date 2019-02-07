@@ -19,12 +19,19 @@
 		    padding:3px;
         overflow-x: hidden;
         overflow-y: scroll;
+       
+      
 		   }
       
       .chatlog::-webkit-scrollbar{
         width:10px;
 
         
+      }
+      .logbox{
+      	display: table;
+      	width: 100%;
+
       }
 
       .chatlog::-webkit-scrollbar-thumb{
@@ -34,7 +41,7 @@
       }
       .chat-form{
         display:flex;    
-  align-items:flex-start;
+  		align-items:flex-start;
       }
       .chat-form textarea{
         height: 55px;
@@ -107,45 +114,52 @@
 <div class="col-sm-4 chat" >   
     <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
     <hr style="margin:1px">
-    <div class=chatlog >
+<div class=chatlog >
       
-    
+    <div class ="logbox">
       <div class="logcontainer ">
         <p>Hello. How are you today?</p>
         <span class="time">11:00</span>
       </div>
-
+  </div>
+  <div class ="logbox">
       <div class="logcontainer child">
         <p>Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!</p>
-        
         <span class="time">11:01</span>
       </div>
-
+  </div>
+  <div class ="logbox">
       <div class="logcontainer">
         <p>Sweet! So, what do you wanna do today?</p>
         <span class="time">11:02</span>
       </div>
-
+  </div>
+  <div class ="logbox">
       <div class="logcontainer child">
         <p>Nah, I dunno. Play socc</p>
         <span class="time">11:05</span>
       </div>
-
+  </div>
+  <div class ="logbox">
       <div class="logcontainer">
         <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
         <span class="time">11:05</span>
       </div>
-
+  </div>
+  <div class ="logbox">
       <div class="logcontainer child">
         <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
         <span class="time">11:05</span>
       </div>
-
+  </div>
+  <div class ="logbox">
       <div class="logcontainer">
         <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
         <span class="time">11:05</span>
       </div>
-    </div>
+   </div>
+</div>
+
     <hr style="margin:1px">
     <div class="chat-form" >
       <textarea></textarea>
