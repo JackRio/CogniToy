@@ -1,17 +1,17 @@
 $('#sendbtn').click(sendQuestion);
-$('#transcript').keypress(sendQuestion);
+$('#textmsg').keypress(sendQuestion);
 
 var userSectionId = 0;
 var botSectionId = 0;
 
 function sendQuestion(e) {
 	var id = e.target.id,
-		notEmpty = $('#transcript').val() != '',
+		notEmpty = $('#textmsg').val() != '',
 		isEnterKeypress = e.type == 'keypress' && e.keyCode == 13,
 		isSendClick = e.type == 'click' && id == 'sendbtn';
 
 	if( notEmpty && (isEnterKeypress || isSendClick) ) {
-		question = $.trim($('#transcript').val())
+		question = $.trim($('#textmsg').val())
 		appendUserChat(question)
 		getResponse(question)
 	}
@@ -21,7 +21,7 @@ function appendUserChat(string) {
 	var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">11:01</span></div></div>';
 	$('.chatlog').append(txt);
 
-	$('#transcript').val('');
+	$('#textmsg').val('');
 	$('.UserPic').css('display', 'unset');
 }
 
@@ -29,7 +29,7 @@ function appendBotChat(string) {
 	var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">11:00</span></div></div>';
 	$('.chatlog').append(txt);
 
-	$('#transcript').val('');
+	$('#textmsg').val('');
 }
 
 /*function scrollToBottom(){

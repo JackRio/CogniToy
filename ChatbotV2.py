@@ -240,21 +240,10 @@ def askRiddle(response):
 	c.mycursor.execute("SELECT * from riddle")
 	result = c.mycursor.fetchall()
 	num = random.randint(0,len(result)-1)
-	response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
+	# response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
 	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
-	g.context = response['context']
-	response = service.message(
-		assistant_id,
-		session_id,
-		input = {
-			'text': 'yes',
-			'options': {
-				'return_context': True
-			}
-		},
-		context = g.context
-	).get_result()
-	print(response)
+	g.res += result[num][0] +'$'
+	# g.res += result[num][1] +'$'
 
 def giveDefine(response):
 
@@ -286,17 +275,17 @@ def conversation():
 		},
 		context = g.context
 	).get_result()
-
+	g.res = ''
 	if(response["output"]["intents"]):
 		tag_to_func(response["output"]["intents"][0]["intent"],response)
-	
-	res = ''
+	print(response)
+
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
-			res += ele['text'] + '$'
+			g.res += ele['text'] + '$'
 	
-	return res[:-1]	
+	return g.res[:-1]	
 
 if __name__ == '__main__':
 	app.secret_key='secret123'
