@@ -42,15 +42,26 @@ def askRiddle(response):
 	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
 
 def giveDefine(response):
-
-	answer = "Answer Found"
-	response['context']['skills']['main skill']['user_defined']['answer'] = answer
-
+	if response['output']['entities'][0]['entity'] == "Famous_Personalities":	
+		name = response['output']['entities'][0]['value']
+		query = "SELECT ID FROM personalitiesmain WHERE Name = %s"
+		c.mycursor.execute(query,(name,))
+		id_ = c.mycursor.fetchall()
+		query = "SELECT * FROM personalitiesfull WHERE ID = %s"
+		c.mycursor.execute(query,(id_[0][0],))
+		result = c.mycursor.fetchall()
+		answer = ""
+		for row in result:
+			answer += row[1] +":"+ row[2] +"$"
+		response['context']['skills']['main skill']['user_defined']['answer'] = answer[:-1]
+	else:
+		g.res += "Found Nothing Sorry"
+	response['context']['skills']['main skill']['user_defined']['tag'] = None 
 @app.route('/start')
 def start():
 	string = ''
 	for text in g.init_response['output']['generic']: 
-		string+=text['text'] + '$'
+		string += text['text'] + '$'
 	return string[:-1]
 
 @app.route('/conversation', methods = ['POST'])
@@ -69,16 +80,16 @@ def conversation():
 		context = g.context
 	).get_result()
 
-	
+	# print(response)
 	tag_to_func(response['context']['skills']['main skill']['user_defined']['tag'],response)
 
-	res = ''
+	g.res = ''
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text':
-			res += ele['text'] + '$'
+			g.res += ele['text'] + '$'
 
-	return res[:-1]
+	return g.res[:-1]
 
 if __name__ == '__main__':
 	g.init_response = service.message(
@@ -92,6 +103,7 @@ if __name__ == '__main__':
 		},
 		context = g.context
 	).get_result()
+
 
 	app.run(debug = True)
 
