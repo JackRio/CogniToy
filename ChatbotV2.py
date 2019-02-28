@@ -38,29 +38,6 @@ session_id = service.create_session(
 
 
 
-def tag_to_func(tag,response):
-	switcher = {
-		"riddle" : askRiddle,
-		"define" : giveDefine,
-	}
-	func = switcher.get(tag,False)
-	if func:
-		return func(response)
-
-def askRiddle(response):
-
-	c.mycursor.execute("SELECT * from riddle")
-	result = c.mycursor.fetchall()
-
-	num = random.randint(0,len(result)-1)
-	response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
-	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
-
-def giveDefine(response):
-
-	answer = "Answer Found"
-	response['context']['skills']['main skill']['user_defined']['answer'] = answer
-
 # games
 @app.route('/game1')
 def game1():
@@ -249,6 +226,42 @@ def logout():
     return redirect(url_for('login'))
 
 
+def tag_to_func(tag,response):
+	switcher = {
+		"Riddle" : askRiddle,
+		"define" : giveDefine,
+	}
+	func = switcher.get(tag,False)
+	if func:
+		return func(response)
+
+def askRiddle(response):
+	
+	c.mycursor.execute("SELECT * from riddle")
+	result = c.mycursor.fetchall()
+	num = random.randint(0,len(result)-1)
+	response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
+	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
+	g.context = response['context']
+	response = service.message(
+		assistant_id,
+		session_id,
+		input = {
+			'text': 'yes',
+			'options': {
+				'return_context': True
+			}
+		},
+		context = g.context
+	).get_result()
+	print(response)
+
+def giveDefine(response):
+
+	answer = "Answer Found"
+	response['context']['skills']['main skill']['user_defined']['answer'] = answer
+
+
 
 
 @app.route('/start')
@@ -274,16 +287,16 @@ def conversation():
 		context = g.context
 	).get_result()
 
+	if(response["output"]["intents"]):
+		tag_to_func(response["output"]["intents"][0]["intent"],response)
 	
-	tag_to_func(response['context']['skills']['main skill']['user_defined']['tag'],response)
-
 	res = ''
 	g.context = response['context']
 	for ele in response['output']['generic']:
-		if ele['response_type'] == 'text':
+		if ele['response_type'] == 'text' and ele['text']:
 			res += ele['text'] + '$'
-
-	return res[:-1]
+	
+	return res[:-1]	
 
 if __name__ == '__main__':
 	app.secret_key='secret123'
