@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h1>Child Details</h1>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="" >
+	<div class="form-group">
+		{{render_field(form.fname, class_="form-control")}}
+	</div>
+	<div class="form-group">
+		{{render_field(form.lname, class_="form-control")}}
+	</div>
+	<div class="form-group">
+		{{render_field(form.dob, class_="form-control")}}
+	</div>
+	<div class="form-group">
+		{{render_field(form.gender, class_="form-control")}}
+	</div>
+	<div class="form-group">
+		{{render_field(form.grade, class_="form-control")}}
+	</div>
+  </form>
+
+
+{% endblock %}
