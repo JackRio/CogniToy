@@ -3,12 +3,16 @@ import random
 from Global import Global as g
 from Connector import Connector as c
 from Details import Details as d
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from flask import Flask, render_template, flash, redirect, url_for, session, request
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField, RadioField, SelectField,DateTimeField
 from passlib.hash import sha256_crypt
 from functools import wraps
+import re
+import requests
+import wikipedia
+from bs4 import BeautifulSoup
 
 
 app = Flask(__name__)
@@ -229,21 +233,27 @@ def logout():
 def tag_to_func(tag,response):
 	switcher = {
 		"Riddle" : askRiddle,
-		"define" : giveDefine,
+		"Defination" : giveDefine,
+		"General_Jokes": tellJoke,
 	}
 	func = switcher.get(tag,False)
 	if func:
 		return func(response)
+def tellJoke(response):
+	c.mycursor.execute("SELECT * from jokes")
+	result = c.mycursor.fetchall()
+	num =random.sample(range(0,len(result)- 1), 2)
+	response['context']['skills']['main skill']['user_defined']['answer'] = result[num[0]][0]
+	g.res += result[num[1]][0]+ '$'
+	
 
 def askRiddle(response):
 	
 	c.mycursor.execute("SELECT * from riddle")
 	result = c.mycursor.fetchall()
 	num = random.randint(0,len(result)-1)
-	# response['context']['skills']['main skill']['user_defined']['question'] = result[num][0]
 	response['context']['skills']['main skill']['user_defined']['answer'] = result[num][1]
 	g.res += result[num][0] +'$'
-	# g.res += result[num][1] +'$'
 
 def giveDefine(response):
 
@@ -278,7 +288,6 @@ def conversation():
 	g.res = ''
 	if(response["output"]["intents"]):
 		tag_to_func(response["output"]["intents"][0]["intent"],response)
-	print(response)
 
 	g.context = response['context']
 	for ele in response['output']['generic']:

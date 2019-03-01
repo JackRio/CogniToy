@@ -1,12 +1,14 @@
-intents = [
-      {
-        "intent": "Defination",
-        "confidence": 0.5067428588867188
-      }
-    ]
-print(intents[0]["intent"])
+# intents = [
+#       {
+#         "intent": "Defination",
+#         "confidence": 0.5067428588867188
+#       }
+#     ]
+# print(intents[0]["intent"])
+import random
 
-
+num =random.sample(range(0,10), 2)
+print(num[0])
 
 
 
@@ -74,7 +76,7 @@ print(intents[0]["intent"])
 #       }
 #     },
 #     "skills": {
-#       "main skill": {
+#       "main skill": {\
 #         "user_defined": {
 #           "question": "What belongs to you but others use it more than you do?",
 #           "MotherContact": "None",
