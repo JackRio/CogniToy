@@ -18,34 +18,26 @@ function sendQuestion(e) {
 }
 
 function appendUserChat(string) {
-	$('#textmsg').val('');
-	var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">11:30</span></div></div>';
-	$('.chatlog').append(txt);
-<<<<<<< HEAD
-	// responsiveVoice.speak(string);
-	$('.chatlog').animate({scrollTop: 2000});
-	
-	
-=======
-
+	if($('.chatlogs').children().last().attr('class') == 'chat bot'){
+		var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">11:01</span></div></div>';
+		$('.chatlog').append(txt);
+	} else {
+		var txt = '<p class=\"chat-message\">' + string + '</p>';
+		$('#UserSection'+ userSectionId).append(txt);
+	}
 	$('#textmsg').val('');
 	$('.UserPic').css('display', 'unset');
->>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
 }
 
 function appendBotChat(string) {
+	if($('.chatlogs').children().last().attr('class') == 'chat self'){
+		var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">11:00</span></div></div>';
+		$('.chatlog').append(txt);
+	} else {
+		var txt = '<p class=\"chat-message\">' + string + '</p>';
+		$('#BotSection'+ botSectionId).append(txt);
+	}
 	$('#textmsg').val('');
-	var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">11:20</span></div></div>';
-	responsiveVoice.speak(string);
-	$('.chatlog').append(txt);
-<<<<<<< HEAD
-	$('.chatlog').animate({scrollTop: 2000});
-	
-	
-=======
-
-	$('#textmsg').val('');
->>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
 }
 
 /*function scrollToBottom(){
@@ -83,8 +75,7 @@ $(window).on('load', function() {
 		if(data != ''){
 			var dataArr = data.split('$')
 			for(var i = 0;i<dataArr.length;i++){
-				var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">11:10</span></div></div>';
-				responsiveVoice.speak(dataArr[i]);
+				var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">11:00</span></div></div>';
 				$('.chatlog').append(txt);
 			}
 		}

@@ -119,6 +119,17 @@
 	</div>
     <hr style="margin:1px">
     <div class="chat-form" >
+<<<<<<< HEAD
+      <textarea id = 'textmsg' name = 'q' placeholder="Enter Message"></textarea>
+      <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
+
+      <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
+      <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
+      send</button>
+      <!-- 
+      <div class="col-sm-6 speech">
+        <input type="text" name="q" id="transcript" placeholder="Speak" />
+=======
       <textarea id = 'textmsg' placeholder="Enter Message"></textarea>
       <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
       <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
@@ -127,9 +138,11 @@
 
       <!-- <div class="col-sm-6 speech">
         <input type="text" name="q" id="textmsg" placeholder="Speak" />
+>>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
         <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
       </div> -->
       <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+      <!-- <input onclick="responsiveVoice.speak('This is the text you want to speak');" type='button' value='🔊 Play' /> -->
 
     </div>
 </div>
@@ -159,7 +172,11 @@
 
       recognition.onresult = function(e) {
         document.getElementById('textmsg').value
+<<<<<<< HEAD
+                                 = e.results[0][0].transcript;
+=======
                                  = e.results[0][0].textmsg;
+>>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
         recognition.stop();
         <!-- document.getElementById('labnol').submit();-->
       };
@@ -171,6 +188,7 @@
     }
   }
 </script>
-<script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script>
+
 <script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
+<script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script>
 {% endblock %}

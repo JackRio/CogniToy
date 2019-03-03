@@ -1,7 +1,7 @@
 # import nltk.tokenize as nt 
 # import nltk
 # from textblob import TextBlob
-import requests
+
 
 
 # text = "what is apple"
