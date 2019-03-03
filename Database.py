@@ -5,11 +5,10 @@
 #       }
 #     ]
 # print(intents[0]["intent"])
-import random
+# import random
 
-num =random.sample(range(0,10), 2)
-print(num[0])
-
+# num =random.sample(range(0,10), 2)
+# print(num[0])
 
 
 
@@ -33,7 +32,7 @@ print(num[0])
 # # 	for i in range(2,6):
 # # 		val = row[1],index[i],row[i+1]
 # # 		query = "INSERT INTO personalitiesfull VALUES(%s,%s,%s)"
-# # 		if row[i+1]!= 'Na':
+# # 		if row[i+1]!= "Na":
 # # 			c.mycursor.execute(query,val)
 # # 			c.mydb.commit()
 
@@ -42,28 +41,33 @@ print(num[0])
 # 	df.append(row[2])
 
 # df = pd.DataFrame(df)
-# df.to_csv("Names",sep=',')
+# df.to_csv("Names",sep=",")
 
 
 
 						# JSON Format
 # {
 #   "output": {
-#     "generic": [],
+#     "generic": [
+#       {
+#         "response_type": "text",
+#         "text": "It is the only planet that has liquid water on its surface. It is also the  only planet in the solar system that has life. The Earth is the inner planet (Mercury, Venus, Earth and Mars) to have one large satellite, the Moon."
+#       }
+#     ],
 #     "intents": [
 #       {
 #         "intent": "Defination",
-#         "confidence": 0.5067428588867188
+#         "confidence": "1"
 #       }
 #     ],
 #     "entities": [
 #       {
-#         "entity": "Famous_Personalities",
+#         "entity": "Planet",
 #         "location": [
-#           24,
-#           28
+#           "14",
+#           "19"
 #         ],
-#         "value": "Alia Bhatt",
+#         "value": "Earth",
 #         "confidence": 1
 #       }
 #     ]
@@ -71,30 +75,27 @@ print(num[0])
 #   "context": {
 #     "global": {
 #       "system": {
-#         "turn_count": 2,
-#         "skill_reference_id": "b6aaf0ea-5291-4ef6-bce8-0e821c3be3a3"
+#         "turn_count": 2
 #       }
 #     },
 #     "skills": {
-#       "main skill": {\
+#       "main skill": {
 #         "user_defined": {
-#           "question": "What belongs to you but others use it more than you do?",
-#           "MotherContact": "None",
-#           "Name": "jack",
-#           "Hobby": "None",
-#           "Subject": "None",
-#           "tag": "define",
-#           "FatherContact": "None",
-#           "Start": "True",
+#           "question": ""None"",
+#           "Name": "Sanyog",
+#           "Start": "False",
 #           "Details": "False",
-#           "answer": "None",
-#           "end": "conversation",
-#           "MotherName": "None",
-#           "Animal": "None",
-#           "FatherName": "None",
-#           "Time": "2019-02-07 13:07:45"
+#           "answer": "Answer Found",
+#           "Time": "2019-03-02 06:16:14",
+#           "tag": "define",
+#           "Planet": "Earth"
 #         }
 #       }
 #     }
 #   }
 # }
+
+
+
+
+

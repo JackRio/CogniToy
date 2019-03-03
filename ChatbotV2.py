@@ -289,6 +289,7 @@ def conversation():
 	if(response["output"]["intents"]):
 		tag_to_func(response["output"]["intents"][0]["intent"],response)
 
+	print(response)
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
