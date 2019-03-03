@@ -21,16 +21,16 @@ function appendUserChat(string) {
 	$('#textmsg').val('');
 	var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">11:30</span></div></div>';
 	$('.chatlog').append(txt);
-<<<<<<< HEAD
+
 	// responsiveVoice.speak(string);
 	$('.chatlog').animate({scrollTop: 2000});
 	
 	
-=======
+
 
 	$('#textmsg').val('');
 	$('.UserPic').css('display', 'unset');
->>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
+
 }
 
 function appendBotChat(string) {
@@ -38,14 +38,14 @@ function appendBotChat(string) {
 	var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">11:20</span></div></div>';
 	responsiveVoice.speak(string);
 	$('.chatlog').append(txt);
-<<<<<<< HEAD
+
 	$('.chatlog').animate({scrollTop: 2000});
 	
 	
-=======
+
 
 	$('#textmsg').val('');
->>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
+
 }
 
 /*function scrollToBottom(){
