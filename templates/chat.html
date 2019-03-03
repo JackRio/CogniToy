@@ -1,0 +1,176 @@
+{% extends 'layout.html' %}
+{% block body %}
+<style>
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+  .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
+  .speech img {float: right; width: 40px }
+
+        .chat{
+        border: 1px #3D3837;
+        /*background-image:url("static/kindergarten.jpg");*/
+        border-radius:6px;
+        padding: 4px;
+        margin: 5px 0;
+		    margin-top:0;
+        height:560px;          
+        }
+        .chatlog{
+        height:450px;
+		    padding:3px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+       
+      
+		   }
+      
+      .chatlog::-webkit-scrollbar{
+        width:10px;
+
+        
+      }
+      .logbox{
+      	display: table;
+      	width: 100%;
+
+      }
+
+      .chatlog::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background: rgba(0,0,0,.2)
+        
+      }
+      .chat-form{
+        display:flex;    
+  		align-items:flex-start;
+      }
+      .chat-form textarea{
+        height: 55px;
+        width:80%;
+        
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-top: 5px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+      }
+
+      .chat-form textarea::-webkit-scrollbar{
+        width:8px;
+
+        
+      }
+
+      .chat-form textarea::-webkit-scrollbar-thumb{
+        border-radius: 4px;
+        background: rgba(0,0,0,.3)
+        
+      }
+     
+      
+    .logcontainer {
+      border: 2px solid #dedede;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 3px;
+      margin: 5px 0;
+      max-width: 80%;
+      display: table;
+      float:left;
+
+	     
+    }
+
+    .child {
+      border-color: #ccc;
+      background-color: #ddd;
+      text-align: right;
+      float:right;
+
+    }
+
+
+    .logcontainer::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    
+
+    .time {
+      float: right;
+      color: #aaa;
+    }
+
+    
+    
+  
+
+
+
+</style>
+
+<div class="col-sm-4 chat" >   
+    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
+    <hr style="margin:1px">
+	<div class="chatlog" > 
+	<!-- chat comes hear -->
+	</div>
+    <hr style="margin:1px">
+    <div class="chat-form" >
+      <textarea id = 'textmsg' placeholder="Enter Message"></textarea>
+      <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
+      <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
+      send</button>
+      <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
+
+      <!-- <div class="col-sm-6 speech">
+        <input type="text" name="q" id="textmsg" placeholder="Speak" />
+        <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
+      </div> -->
+      <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+
+    </div>
+</div>
+
+
+
+
+
+<!-- Search Form
+<form id="labnol" method="get" action="https://www.google.com/search"></form>-->
+ 
+
+<!-- HTML5 Speech Recognition API -->
+<!-- <script type="text/javascript" src = "{{ url_for('static', filename = 'js/jquery.min.js') }}"></script> -->
+<script>
+  function startDictation() {
+
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+      var recognition = new webkitSpeechRecognition();
+
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.lang = "en-US";
+      recognition.start();
+
+      recognition.onresult = function(e) {
+        document.getElementById('textmsg').value
+                                 = e.results[0][0].textmsg;
+        recognition.stop();
+        <!-- document.getElementById('labnol').submit();-->
+      };
+
+      recognition.onerror = function(e) {
+        recognition.stop();
+      }
+
+    }
+  }
+</script>
+<script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script>
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
+{% endblock %}

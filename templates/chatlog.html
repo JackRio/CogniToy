@@ -1,0 +1,180 @@
+
+
+  
+{% extends 'layout.html' %}
+
+
+
+{% block body %}
+<style>
+    .affix {
+    top: 25px;
+    z-index: 9999 !important;
+  }
+  .chat{
+        border: 1px #3D3837;
+         background-image:url("static/kindergarten.jpg");
+        border-radius:6px;
+        padding: 4px;
+        margin: 5px 0;
+		    margin-top:0;
+        height:560px;          
+        }
+        .chatlog{
+        height:515px; 
+		    padding:3px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+       
+      
+		   }
+      
+      .chatlog::-webkit-scrollbar{
+        width:10px;
+
+        
+      }
+      .logbox{
+      	display: table;
+      	width: 100%;
+
+      }
+
+      .chatlog::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background: rgba(0,0,0,.2)
+        
+      }
+      
+    .logcontainer {
+      border: 2px solid #dedede;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 3px;
+      margin: 5px 0;
+      max-width: 80%;
+      display: table;
+      float:left;
+
+	     
+    }
+
+    .child {
+      border-color: #ccc;
+      background-color: #ddd;
+      text-align: right;
+      float:right;
+
+    }
+
+
+    .logcontainer::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    
+
+    .time {
+      float: right;
+      color: #aaa;
+    }
+  		
+		</style>
+
+
+  <div class="row">
+    <nav class="col-sm-2">
+      <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="40">
+        <li><a href="#section1">Section 1</a></li>
+        <li><a href="#section2">Section 2</a></li>
+        <li><a href="#section3">Section 3</a></li>
+      </ul>
+    </nav>
+    <div class="col-sm-8 chat">   
+	<h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
+    <hr style="margin:1px">
+	<div class=chatlog id = "section1">
+      
+    <div class ="logbox">
+      <div class="logcontainer ">
+        <p>Hello. How are you today?</p>
+        <span class="time">11:00</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer child">
+        <p>Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!</p>
+        <span class="time">11:01</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer">
+        <p>Sweet! So, what do you wanna do today?</p>
+        <span class="time">11:02</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer child">
+        <p>Nah, I dunno. Play socc</p>
+        <span class="time">11:05</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer">
+        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+        <span class="time">11:05</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer child">
+        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+        <span class="time">11:05</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer">
+        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+        <span class="time">11:05</span>
+      </div>
+   </div>
+   <div class ="logbox">
+      <div class="logcontainer">
+        <p>Sweet! So, what do you wanna do today?</p>
+        <span class="time">11:02</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer child">
+        <p>Nah, I dunno. Play socc</p>
+        <span class="time">11:05</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer">
+        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+        <span class="time">11:05</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer child">
+        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+        <span class="time">11:05</span>
+      </div>
+  </div>
+  <div class ="logbox">
+      <div class="logcontainer">
+        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+        <span class="time">11:05</span>
+      </div>
+    </div>
+    <hr style="margin:1px">
+  </div>
+<hr style="margin:2px">
+
+
+
+
+
+{% endblock %}
