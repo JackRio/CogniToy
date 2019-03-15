@@ -12,7 +12,9 @@
         padding: 4px;
         margin: 5px 0;
 		    margin-top:0;
-        height:560px;          
+        height:560px;   
+
+       
         }
         .chatlog{
         height:450px;
@@ -102,17 +104,80 @@
       float: right;
       color: #aaa;
     }
+	.switch {
+	  position: relative;
+	  display: inline-block;
+	  width: 25px;
+	  height: 11px;
+	  display: flex;
+	  float:right;
+	}
 
-    
-    
-  
+	.switch input { 
+	  opacity: 0;
+	  width: 0;
+	  height: 0;
+	}
+
+	.slider {
+	  position: absolute;
+	  cursor: pointer;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: #ccc;
+	  -webkit-transition: .4s;
+	  transition: .4s;
+	}
+
+	.slider:before {
+	  position: absolute;
+	  content: "";
+	  height: 8px;
+	  width: 8px;
+	  left: 2px;
+	  bottom: 2px;
+	  background-color: white;
+	  -webkit-transition: .4s;
+	  transition: .4s;
+	}
+
+	input:checked + .slider {
+	  background-color: #2196F3;
+	}
+
+	input:focus + .slider {
+	  box-shadow: 0 0 1px #2196F3;
+	}
+
+	input:checked + .slider:before {
+	  -webkit-transform: translateX(13px);
+	  -ms-transform: translateX(13px);
+	  transform: translateX(13px);
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+	  border-radius: 50px;
+	}
+
+	.slider.round:before {
+	  border-radius: 50%;
+	} 
 
 
 
 </style>
 
 <div class="col-sm-4 chat" >   
-    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
+    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px;">Chat
+    <label class=" switch">
+    	<h6><i><b style="float:top">Audio</b></i></h6>
+		<input type="checkbox" checked>
+		<span class="slider round"></span>
+	</label> 
+	</h3>
     <hr style="margin:1px">
 	<div class="chatlog" > 
 	<!-- chat comes hear -->
@@ -135,7 +200,7 @@
       send</button>
       <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
 
-      <!-- <div class="col-sm-6 speech">
+       <div class="col-sm-6 speech">
         <input type="text" name="q" id="textmsg" placeholder="Speak" />
 >>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
         <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
@@ -144,6 +209,8 @@
       <!-- <input onclick="responsiveVoice.speak('This is the text you want to speak');" type='button' value='🔊 Play' /> -->
 
     </div>
+   
+
 </div>
 
 
@@ -185,5 +252,5 @@
 </script>
 
 <script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
-<script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script>
+<!-- <script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script> -->
 {% endblock %}
