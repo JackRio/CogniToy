@@ -232,8 +232,8 @@
 
       recognition.continuous = false;
       recognition.interimResults = false;
-
-      recognition.lang = "en-US";
+      recognition.lang = "hi-IN";
+      recognition.gender = 'f'
       recognition.start();
 
       recognition.onresult = function(e) {
@@ -252,5 +252,9 @@
 </script>
 
 <script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
+<<<<<<< HEAD
 <!-- <script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script> -->
+=======
+<!-- <script src='//vws.responsivevoice.com/v/e?key=gwUnQs4q'></script> -->
+>>>>>>> 4cbcffe314ea73d13afcc8d12fd6447aaa156377
 {% endblock %}
