@@ -9,10 +9,8 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField, RadioField, SelectField,DateTimeField
 from passlib.hash import sha256_crypt
 from functools import wraps
-import re
-import requests
-import wikipedia
-from bs4 import BeautifulSoup
+import Scraping
+
 
 
 app = Flask(__name__)
@@ -239,6 +237,7 @@ def tag_to_func(tag,response):
 	func = switcher.get(tag,False)
 	if func:
 		return func(response)
+
 def tellJoke(response):
 	c.mycursor.execute("SELECT * from jokes")
 	result = c.mycursor.fetchall()
@@ -257,8 +256,13 @@ def askRiddle(response):
 
 def giveDefine(response):
 
-	answer = "Answer Found"
-	response['context']['skills']['main skill']['user_defined']['answer'] = answer
+	response = ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
+	i = random.randint(0,len(response)-1)
+	if (random.uniform(0,1) > 0.65):
+		print(response[i])
+	answer = Scraping.search( response )
+	g.res += answer
+
 
 
 
@@ -286,15 +290,15 @@ def conversation():
 		context = g.context
 	).get_result()
 	g.res = ''
-	if(response["output"]["intents"]):
-		tag_to_func(response["output"]["intents"][0]["intent"],response)
-
-	print(response)
+	
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
 			g.res += ele['text'] + '$'
 	
+	if(response["output"]["intents"]):
+		tag_to_func(response["output"]["intents"][0]["intent"],response)
+
 	return g.res[:-1]	
 
 if __name__ == '__main__':
