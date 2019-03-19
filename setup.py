@@ -256,12 +256,13 @@ def askRiddle(response):
 
 def giveDefine(response):
 
-	response = ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
+	respond= ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
 	i = random.randint(0,len(response)-1)
-	if (random.uniform(0,1) > 0.65):
-		print(response[i])
-	answer = Scraping.search( response )
-	g.res += answer
+	if(response["output"]["entities"]):
+		answer = Scraping.search( response )
+		g.res += answer
+		if (random.uniform(0,1) > 0.65):
+			g.res += respond[i]
 
 
 

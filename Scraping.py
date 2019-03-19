@@ -11,6 +11,8 @@ def search(response):
 	wiki_page += search
 	html_page = requests.get(wiki_page)
 	soup = BeautifulSoup(html_page.text,'lxml')
+	for table in soup.find_all("table"):
+		table.extract()
 	name_box = soup.select('p')
 
 	para = name_box[0].getText()
