@@ -1,8 +1,8 @@
 watson_developer_cloud==2.5.1
-random
 flask ==1.0.2
 flask_cors==3.0.4
 flask_mysqldb==0.2.0
 wtforms==2.2.1
 passlib==1.7.1
 functools
+random
