@@ -14,14 +14,15 @@ import Scraping
 
 
 app = Flask(__name__)
+app.secret_key='secret123'
 CORS(app)
 
 
 # Config MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'jarvis'
+app.config['MYSQL_HOST'] = 'remotemysql.com'
+app.config['MYSQL_USER'] = 'LpPJcmW4ti'
+app.config['MYSQL_PASSWORD'] = 'jWPEOTGee7'
+app.config['MYSQL_DB'] = 'LpPJcmW4ti'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # init MYSQL
 mysql = MySQL(app)
@@ -303,7 +304,6 @@ def conversation():
 	return g.res[:-1]	
 
 if __name__ == '__main__':
-	app.secret_key='secret123'
 	g.init_response = service.message(
 		assistant_id,
 		session_id,

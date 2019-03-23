@@ -190,21 +190,7 @@
       <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
       <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
       send</button>
-      <!-- 
-      <div class="col-sm-6 speech">
-        <input type="text" name="q" id="transcript" placeholder="Speak" />
-=======
-      <textarea id = 'textmsg' placeholder="Enter Message"></textarea>
-      <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
-      <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
-      send</button>
-      <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
-
-       <div class="col-sm-6 speech">
-        <input type="text" name="q" id="textmsg" placeholder="Speak" />
->>>>>>> 295bb5c53d4d3112aaf34498580f7d343ed1ff2c
-        <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
-      </div> -->
+      
       <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
       <!-- <input onclick="responsiveVoice.speak('This is the text you want to speak');" type='button' value='🔊 Play' /> -->
 
@@ -217,12 +203,6 @@
 
 
 
-<!-- Search Form
-<form id="labnol" method="get" action="https://www.google.com/search"></form>-->
- 
-
-<!-- HTML5 Speech Recognition API -->
-<!-- <script type="text/javascript" src = "{{ url_for('static', filename = 'js/jquery.min.js') }}"></script> -->
 <script>
   function startDictation() {
 
@@ -252,9 +232,5 @@
 </script>
 
 <script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
-<<<<<<< HEAD
-<!-- <script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script> -->
-=======
-<!-- <script src='//vws.responsivevoice.com/v/e?key=gwUnQs4q'></script> -->
->>>>>>> 4cbcffe314ea73d13afcc8d12fd6447aaa156377
+
 {% endblock %}
