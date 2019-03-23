@@ -18,10 +18,10 @@ CORS(app)
 
 
 # Config MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'root'
-app.config['MYSQL_DB'] = 'jarvis'
+app.config['MYSQL_HOST'] = 'remotemysql.com'
+app.config['MYSQL_USER'] = 'LpPJcmW4ti'
+app.config['MYSQL_PASSWORD'] = 'jWPEOTGee7'
+app.config['MYSQL_DB'] = 'LpPJcmW4ti'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # init MYSQL
 mysql = MySQL(app)

@@ -1,10 +1,10 @@
 import mysql.connector
 
 mydb = mysql.connector.connect(
-		host = "localhost",
-		user = "root",
-		passwd = "root",
-		database = "jarvis"
+		host = "remotemysql.com",
+		user = "LpPJcmW4ti",
+		passwd = "jWPEOTGee7",
+		database = "LpPJcmW4ti"
 	)
 
 mycursor = mydb.cursor()
