@@ -81,6 +81,7 @@ $(window).on('load', function() {
 		url: 'http://127.0.0.1:5000/start'
 	}).always( function(data1) {
 		if(data1 != ''){
+			console.log(data1)
 			var dataArr = data1.split('$')
 			for(var i = 0;i<dataArr.length;i++){
 				var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">11:10</span></div></div>';
