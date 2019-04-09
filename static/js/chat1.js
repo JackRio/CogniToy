@@ -55,7 +55,7 @@ function appendBotChat(string) {
 
 function getResponse(string) {
 	$.ajax({
-		url: 'https://jrjarvis.herokuapp.com/conversation',
+		url: 'http://127.0.0.1:5000/conversation',
 		headers: {
 			'Content-Type':'application/json'
 		},
@@ -78,7 +78,7 @@ function getResponse(string) {
 
 $(window).on('load', function() {
 	$.ajax({
-		url: 'https://jrjarvis.herokuapp.com/start'
+		url: 'http://127.0.0.1:5000/start'
 	}).always( function(data1) {
 		if(data1 != ''){
 			console.log(data1)

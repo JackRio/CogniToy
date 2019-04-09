@@ -86,11 +86,11 @@ def chatlog():
 
 # Register Form Class
 class RegisterForm(Form):
-    f_name = StringField('Father Name', [validators.Length( max=50)])
+    f_name = StringField('Father Name', [validators.Length(min = 1, max=50)])
     f_contact = IntegerField('Father Contact No.')
     f_email = StringField('Father Email Id', [validators.Email()])
     
-    m_name = StringField('Mother Name', [validators.Length( max=50)])
+    m_name = StringField('Mother Name', [validators.Length(min = 1, max=50)])
     m_contact = IntegerField('Mother Contact No.')
     m_email = StringField('Mother Email Id', [validators.Email()])
     
@@ -178,7 +178,12 @@ def login():
         # Get Form Fields
         username = request.form['username']
         password_candidate = request.form['password']
-
+        if len(username) == 0:
+            error = 'Username is empty'
+            return render_template('login.html', error=error)
+        elif len(password_candidate) == 0:
+            error = 'Password is empty'
+            return render_template('login.html', error=error)
         # Create cursor
         cur = mysql.connection.cursor()
 
@@ -240,11 +245,14 @@ def tag_to_func(tag,response):
 		return func(response)
 
 def tellJoke(response):
-	c.mycursor.execute("SELECT * from jokes")
-	result = c.mycursor.fetchall()
-	num =random.sample(range(0,len(result)- 1), 2)
-	response['context']['skills']['main skill']['user_defined']['answer'] = result[num[0]][0]
-	g.res += result[num[1]][0]+ '$'
+    respond= ['Do you want to hear another one?','How about one more?','Another joke?']
+    c.mycursor.execute("SELECT * from jokes")
+    result = c.mycursor.fetchall()
+    num =random.sample(range(0,len(result)- 1), 2)
+    response['context']['skills']['main skill']['user_defined']['answer'] = result[num[0]][0]
+    g.res += result[num[1]][0]+ '$'
+    i = random.randint(0,len(respond)-1)
+    g.res += respond[i]
 	
 
 def askRiddle(response):
@@ -258,7 +266,7 @@ def askRiddle(response):
 def giveDefine(response):
 
 	respond= ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
-	i = random.randint(0,len(response)-1)
+	i = random.randint(0,len(respond)-1)
 	if(response["output"]["entities"]):
 		answer = Scraping.search( response )
 		g.res += answer
