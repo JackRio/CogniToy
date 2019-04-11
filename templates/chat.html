@@ -180,10 +180,10 @@
 		<input type="checkbox" >
 		<span class="slider round"></span>
 	</label>  -->
-  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i class="fas fa-volume-mute" style="font-size:20px; margin-left: 3px;"></i></button>
+  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i onclick="volumetoggle(this)" class="fas fa-volume-mute" style="font-size:20px; margin-left: 3px;"></i></button>
 
   
-  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i class="fas fa-volume-up" style="font-size:20px; margin-left: 3px;"></i></button>
+
 
 	</h3>
     <hr style="margin:1px">
@@ -288,6 +288,11 @@
 <script  src = "{{ url_for('static', filename = 'js/huskyjs.js') }}"></script>
 
 <script>
+  function volumetoggle(x) {
+  x.classList.toggle("fa-volume-up");
+}
+
+
   function startDictation() {
 
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
