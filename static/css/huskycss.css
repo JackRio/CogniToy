@@ -1991,7 +1991,7 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
-  flex-direction: column;
+  /*flex-direction: column;*/
   justify-content: center;
   align-items: center;
   background-color: #4F8EDB;
