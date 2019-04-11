@@ -149,28 +149,28 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-class ChildDetails(Form):
-    fname = StringField('First Name', [validators.Length( max=50)])
-    lname = StringField('Last Name', [validators.Length( max=50)])
-    #nickname = StringField('Nick Name', [validators.Length( max=50)])
-    dob = DateTimeField('Birthday', format='%d/%m/%y')
-    gender = RadioField('Gender', choices = [('M','Male'),('F','Female')])
-    grade = SelectField('Grade', choices = [('KinderGarden','1st','2nd','3rd','4th','5th','6th','7th','8th','9th')])
+class ChildDetail(Form):
+    fname = StringField('First Name', [validators.Length(min =1, max=50)])
+    # lname = StringField('Last Name', [validators.Length(min =1, max=50)])
+    # #nickname = StringField('Nick Name', [validators.Length( max=50)])
+    # dob = DateTimeField('Birthday', format='%d/%m/%y')
+    # gender = RadioField('Gender', choices = [('M','Male'),('F','Female')])
+    # grade = SelectField('Grade', choices = [('KinderGarden'),('1st'),('2nd'),('3rd'),('4th'),('5th'),('6th'),('7th'),('8th'),('9th')])
 # User login
 
 @app.route('/childdetail', methods=['GET', 'POST'])
 def childdetail():
     # render_template('childdetails.html')
-
-    form = childdetails(request.form)
+    form1 = ChildDetail(request.form)
     if request.method == 'POST' and form.validate():
         fname = form.fname.data
-        lname = form.lname.data
-        #nickname = form.nickname.data
-        dob = form.dob.data
-        gender = form.gender.data
-        grade = form.garde.data
-    render_template('childdetails.html',form=form)
+        # lname = form.lname.data
+        # #nickname = form.nickname.data
+        # # dob = form.dob.data
+        # gender = form.gender.data
+        # grade = form.garde.data
+        return redirect(url_for('home')) 
+    return render_template('childdetails.html',form=form1)
 # User login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
