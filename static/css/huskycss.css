@@ -1975,13 +1975,16 @@ div:before, div:after {
 .ChildrenHusk{
     float: right;
     padding: 50px;
-}
 
+
+}
+.container2{
+	display: flex;
+}
 body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
