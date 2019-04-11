@@ -9,8 +9,8 @@
   .speech img {float: right; width: 40px }
 
         .chat{
-        border: 1px #3D3837;
-        /*background-image:url("static/kindergarten.jpg");*/
+        border: 3px ;
+        background-color: #76B2FC;
         border-radius:6px;
         padding: 4px;
         margin: 5px 0;
@@ -173,13 +173,18 @@
 
 </style>
 
-<div class="col-sm-5 chat" >   
-    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px;">Chat
-    <label class=" switch">
-    	<h6><i><b style="float:top">Audio</b></i></h6>
-		<input type="checkbox" checked>
+<div class="col-sm-4 chat" >   
+    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px;margin-right: 9px;">Chat
+    <!-- <label class=" switch">
+    	<h6><i><b style="">Mute</b></i></h6>
+		<input type="checkbox" >
 		<span class="slider round"></span>
-	</label> 
+	</label>  -->
+  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i class="fas fa-volume-mute" style="font-size:20px; margin-left: 3px;"></i></button>
+
+  
+  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i class="fas fa-volume-up" style="font-size:20px; margin-left: 3px;"></i></button>
+
 	</h3>
     <hr style="margin:1px">
 	<div class="chatlog" > 
@@ -188,12 +193,10 @@
     <hr style="margin:1px">
     <div class="chat-form" >
       <textarea id = 'textmsg' name = 'q' placeholder="Enter Message"></textarea>
-      <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
-
-      <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
+       <button onclick="startDictation()" style="background-color:transparent; font-size:24px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i class="fas fa-microphone" style="font-size:40px; margin-top: 11px;margin-left: 3px;"></i></button> 
+      <button id="sendbtn" style="width: 12%;margin-top: 9px; margin-bottom:  9px; margin-left:3px; border-radius: 11px;">
       <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
       send</button>
-      
       <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
       <!-- <input onclick="responsiveVoice.speak('This is the text you want to speak');" type='button' value='🔊 Play' /> -->
 

@@ -1721,8 +1721,8 @@ div:before, div:after {
   border-top-color: transparent;
 }
 .lips:after {
-  -webkit-transform: rotateY(180deg);
-          transform: rotateY(180deg);
+  -webkit-transform: rotateY(170deg);
+          transform: rotateY(170deg);
   left: initial;
   right: 0;
 }
