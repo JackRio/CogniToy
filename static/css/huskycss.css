@@ -1741,14 +1741,6 @@ div:before, div:after {
   border-bottom-right-radius: 50% 20%;
 }
 
-.body {
-  -webkit-animation: body 12s none infinite;
-          animation: body 12s none infinite;
-  width: 45%;
-  height: 100%;
-  position: absolute;
-  left: 25%;
-}
 
 .torso {
   position: absolute;
@@ -1970,7 +1962,22 @@ div:before, div:after {
             filter: url("#squiggly-4");
   }
 }
-html, body {
+
+.body {
+  -webkit-animation: body 12s none infinite;
+          animation: body 12s none infinite;
+  width: 45%;
+  height: 100%;
+  position: absolute;
+  left: 25%;
+}
+
+.ChildrenHusk{
+    float: right;
+    padding: 50px;
+}
+
+body {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
