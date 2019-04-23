@@ -73,7 +73,7 @@ $(window).on('load', function() {
 		url: 'http://127.0.0.1:5000/start'
 	}).always( function(data) {
 		if(data != ''){
-			var dataArr = data.responseText.split('$')
+			var dataArr = data.split('$')
 			for(var i = 0;i<dataArr.length;i++){
 				var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">11:00</span></div></div>';
 				$('.chatlog').append(txt);

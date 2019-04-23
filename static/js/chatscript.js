@@ -58,8 +58,11 @@ function getResponse(string) {
 		if(data.status == 200){
 			var dataArr = data.responseText.split('$')
 			for(var i = 0;i<dataArr.length;i++){
+				/*shouldScroll = ($('.chatlogs').scrollTop + $('.chatlogs').clientHeight === $('.chatlogs').scrollHeight);*/
 				appendBotChat(dataArr[i])
-				
+				/*if(!shouldScroll){
+					scrollToBottom();
+				}*/
 			}
 		}
 	});
