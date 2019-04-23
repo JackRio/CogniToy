@@ -16,8 +16,6 @@
         margin: 5px 0;
 		    margin-top:0;
         height:560px;   
-
-       
         }
         .chatlog{
         height:450px;
@@ -305,7 +303,7 @@
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = "hi-IN";
-      recognition.gender = 'f'
+      recognition.gender = 'm'
       recognition.start();
 
       recognition.onresult = function(e) {
@@ -322,7 +320,7 @@
       }
       recognition.onend = function() {
         x.style.color = "black";
-                
+
       }
 
     }

@@ -39,7 +39,7 @@ session_id = service.create_session(
 	assistant_id = assistant_id
 	).get_result()['session_id']
 
-
+sec_q=[(1,"Which phone number do you remember most from your childhood?"),(2,"What was your favorite place to visit as a child?"),(3,"Who is your favorite actor, musician, or artist?"),(4,"What is the name of your favorite pet?"),(5,"In what city were you born?"),(6,"What high school did you attend?"),(7,"What is the name of your first school?"),(8,"What is your favorite movie?"),(9,"What is your mother's maiden name?")]
 
 # games
 @app.route('/game1')
@@ -82,12 +82,12 @@ def chatlog():
 
 # Register Form Class
 class RegisterForm(Form):
-    f_name = StringField('Father Name', [validators.Length(min = 1, max=50)])
-    f_contact = IntegerField('Father Contact No.')
+    f_name = StringField('Father Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
+    f_contact = IntegerField('Father Contact No.',[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
     f_email = StringField('Father Email Id', [validators.Email()])
     
-    m_name = StringField('Mother Name', [validators.Length(min = 1, max=50)])
-    m_contact = IntegerField('Mother Contact No.')
+    m_name = StringField('Mother Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
+    m_contact = IntegerField('Mother Contact No.',[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
     m_email = StringField('Mother Email Id', [validators.Email()])
     
     username = StringField('Username', [validators.DataRequired(),validators.Length(min=4, max=20)])
@@ -96,12 +96,12 @@ class RegisterForm(Form):
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
-    confirm = PasswordField('Confirm Password')
+    confirm = PasswordField('Confirm Password',[validators.DataRequired()])
     
-    Sec_Q = StringField('Security Question', [validators.Length(min=5, max=20)])
-    Sec_A = StringField('Security Answer', [validators.Length(min=4, max=20)])
-
-    Address = TextAreaField('Address')
+    # Sec_Q = StringField('Security Question', [validators.Length(min=5, max=20)])
+    Sec_A = StringField('Security Answer', [validators.DataRequired(),validators.Length(min=4, max=20)])
+    Sec_Q = SelectField('Security Question', choices =sec_q)
+    Address = TextAreaField('Address',[validators.Length(min = 2,message="Enter Address")])
     
 # User Register
 @app.route('/register', methods=['GET', 'POST'])
