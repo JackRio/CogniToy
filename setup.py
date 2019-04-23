@@ -143,7 +143,9 @@ def register():
         flash('Registration Succefully, login to continue', 'success')
 
         return redirect(url_for('login'))
-    return render_template('register.html', form=form)
+    else:
+    	error = 'Some error occured'
+    	return render_template('register.html', form=form, error=error)
 
 class ChildDetail(Form):
     fname = StringField('First Name', [validators.Length(min =1, max=50)])
