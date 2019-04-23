@@ -277,8 +277,8 @@ def giveDefine(response):
 def start():
 	string = ''
 	for text in g.init_response['output']['generic']: 
-		string+=text['text'] + '$'
-	return string[:-1]
+		string += text['text'] + '$'
+	return string[:]
 
 @app.route('/conversation', methods = ['POST'])
 def conversation():
