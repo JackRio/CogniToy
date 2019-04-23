@@ -54,7 +54,7 @@ function appendBotChat(string) {
 
 function getResponse(string) {
 	$.ajax({
-		url: 'http://127.0.0.1:5000/conversation',
+		url: '/conversation',
 		headers: {
 			'Content-Type':'application/json'
 		},
@@ -80,7 +80,7 @@ function getResponse(string) {
 $(window).on('load', function() {
 	if(localStorage.history == ''){
 		$.ajax({
-			url: 'http://127.0.0.1:5000/start'
+			url: '/start'
 		}).always( function(data1) {
 			if(data1 != ''){
 				console.log(data1)
