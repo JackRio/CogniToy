@@ -10,11 +10,11 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators,
 from passlib.hash import sha256_crypt
 from functools import wraps
 import Scraping
-
+import os
 
 
 app = Flask(__name__)
-app.secret_key='secret123'
+app.secret_key= os.urandom(5)
 CORS(app)
 
 
@@ -34,10 +34,10 @@ service = watson_developer_cloud.AssistantV2(
 	version = d.version
 )
 assistant_id = d.assistant_id
-
+session_id = g.session_id
 session_id = service.create_session(
-	assistant_id = assistant_id
-	).get_result()['session_id']
+    assistant_id = assistant_id
+    ).get_result()['session_id']
 
 sec_q=[(1,"Which phone number do you remember most from your childhood?"),(2,"What was your favorite place to visit as a child?"),(3,"Who is your favorite actor, musician, or artist?"),(4,"What is the name of your favorite pet?"),(5,"In what city were you born?"),(6,"What high school did you attend?"),(7,"What is the name of your first school?"),(8,"What is your favorite movie?"),(9,"What is your mother's maiden name?")]
 
@@ -83,11 +83,11 @@ def chatlog():
 # Register Form Class
 class RegisterForm(Form):
     f_name = StringField('Father Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
-    f_contact = IntegerField('Father Contact No.',[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
+    f_contact = IntegerField('Father Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
     f_email = StringField('Father Email Id', [validators.Email()])
     
     m_name = StringField('Mother Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
-    m_contact = IntegerField('Mother Contact No.',[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
+    m_contact = IntegerField('Mother Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
     m_email = StringField('Mother Email Id', [validators.Email()])
     
     username = StringField('Username', [validators.DataRequired(),validators.Length(min=4, max=20)])
@@ -200,7 +200,7 @@ def login():
                 session['username'] = username
 
                 flash('You are now logged in', 'success')
-                return redirect(url_for('chatlog'))
+                return redirect(url_for('chat'))
             else:
                 error = 'Invalid Password'
                 return render_template('login.html', error=error)
@@ -280,7 +280,7 @@ def start():
 	string = ''
 	for text in g.init_response['output']['generic']: 
 		string += text['text'] + '$'
-	return string[:]
+	return string[:-1]
 
 @app.route('/conversation', methods = ['POST'])
 def conversation():
@@ -297,7 +297,7 @@ def conversation():
 		},
 		context = g.context
 	).get_result()
-	g.res = ''
+	g.res = session_id + "$"
 	
 	g.context = response['context']
 	for ele in response['output']['generic']:

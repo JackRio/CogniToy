@@ -24,14 +24,14 @@ function appendUserChat(string) {
 	var time = dt.toLocaleTimeString();
 
 	var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">'+time+'</span></div></div>';
+	if(localStorage.history) {
+		localStorage.history += txt;
+	} else {
+		localStorage.history = txt;
+	}
 	$('.chatlog').append(txt);
-
 	// responsiveVoice.speak(string);
 	$('.chatlog').animate({scrollTop: 2000});
-	
-	
-
-
 	$('#textmsg').val('');
 	
 
@@ -42,29 +42,19 @@ function appendBotChat(string) {
 	var dt = new Date();
 	var time = dt.toLocaleTimeString();
 	var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">'+time+'</span></div></div>';
-	if(document.getElementById("audio").classList.contains("fa-volume-up"))
-	{
-		responsiveVoice.speak(string);
+	if(localStorage.history) {
+		localStorage.history += txt;
+	} else {
+		localStorage.history = txt;
 	}
 	$('.chatlog').append(txt);
-
-	$('.chatlog').animate({scrollTop: 2000});
-	
-	
-
-
 	$('#textmsg').val('');
 
 }
 
-/*function scrollToBottom(){
-	$('.chatlogs').scrollTop = $('.chatlogs').scrollHeight;
-}*/
-
-
 function getResponse(string) {
 	$.ajax({
-		url: 'https://jrjarvis.herokuapp.com/conversation',
+		url: '/conversation',
 		headers: {
 			'Content-Type':'application/json'
 		},
@@ -74,36 +64,50 @@ function getResponse(string) {
 	}).always( function(data) {
 		if(data.status == 200){
 			var dataArr = data.responseText.split('$')
+			var datastr = dataArr.join();
 			for(var i = 0;i<dataArr.length;i++){
-				/*shouldScroll = ($('.chatlogs').scrollTop + $('.chatlogs').clientHeight === $('.chatlogs').scrollHeight);*/
 				appendBotChat(dataArr[i])
-				/*if(!shouldScroll){
-					scrollToBottom();
-				}*/
+				$(".chatlog").scrollTop(10000000000000);
+			}
+			if(document.getElementById("audio").classList.contains("fa-volume-up"))
+			{
+				responsiveVoice.speak(datastr);
 			}
 		}
 	});
 }
 
 $(window).on('load', function() {
-	$.ajax({
-		url: 'https://jrjarvis.herokuapp.com/start'
-	}).always( function(data1) {
-		if(data1 != ''){
-			console.log(data1)
-			var dataArr = data1.split('$')
-			for(var i = 0;i<dataArr.length;i++){
-				var dt = new Date();
-				var time = dt.toLocaleTimeString();
-				var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">'+time+'</span></div></div>';
+	if(localStorage.history == ''){
+		$.ajax({
+			url: '/start'
+		}).always( function(data1) {
+			if(data1 != ''){
+				console.log(data1)
+				var dataArr = data1.split('$')
+				var datastr = dataArr.join()
+				for(var i = 0;i<dataArr.length;i++){
+					var dt = new Date();
+					var time = dt.toLocaleTimeString();
+					var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">'+time+'</span></div></div>';
+					if(localStorage.history) {
+						localStorage.history += txt;
+					} else {
+						localStorage.history = txt;
+					}
+					$('.chatlog').append(txt);
+					$(".chatlog").scrollTop(10000000000000);
+				}
 				if(document.getElementById("audio").classList.contains("fa-volume-up"))
 				{
-					responsiveVoice.speak(dataArr[i]);
+						responsiveVoice.speak(datastr);
 				}
-				$('.chatlog').append(txt);
 			}
-		}
-	});
+		});
+	}
+	else{
+		$('.chatlog').append(localStorage.history);
+	}
 });
 
 
