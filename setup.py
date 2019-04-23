@@ -10,11 +10,11 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators,
 from passlib.hash import sha256_crypt
 from functools import wraps
 import Scraping
-
+import os
 
 
 app = Flask(__name__)
-app.secret_key='secret123'
+app.secret_key= os.urandom(5)
 CORS(app)
 
 
@@ -198,7 +198,7 @@ def login():
                 session['username'] = username
 
                 flash('You are now logged in', 'success')
-                return redirect(url_for('chatlog'))
+                return redirect(url_for('chat'))
             else:
                 error = 'Invalid Password'
                 return render_template('login.html', error=error)
@@ -275,10 +275,10 @@ def giveDefine(response):
 
 @app.route('/start')
 def start():
-	string = ''
+	string = app.secret_key
 	for text in g.init_response['output']['generic']: 
 		string += text['text'] + '$'
-	return string[:]
+	return string[:-1]
 
 @app.route('/conversation', methods = ['POST'])
 def conversation():

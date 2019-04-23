@@ -13,10 +13,9 @@
           <ul class="nav navbar-nav">
             <li><a href="/" >Home</a></li>
             {% if session.logged_in %}
+            <li><a href="/chat">Chat</a></li>
             <li><a href="/chatlog">Chatlog</a></li>
             <li><a href="/childdetail">Childdetail</a></li>
-            {% endif %}
-            <li><a href="/chat">Chat</a></li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">Games
               <span class="caret"></span></a>
@@ -26,13 +25,14 @@
                 <li><a href="/game3">game3</a></li>
               </ul>
             </li>
+            {% endif %}
             <li><a href="/about">About</a></li>
           </ul>
           
           <ul class="nav navbar-nav navbar-right">
             {% if session.logged_in %}
               <!--<li><a href="/dashboard">Dashboard</a></li>-->
-              <li><a href="/logout"><span class="glyphicon glyphicon-log-out"> Logout</a></li>
+              <li><a href="/logout" onclick="clearHistory()"><span class="glyphicon glyphicon-log-out"> Logout</a></li>
             {% else %}
               <li><a href="/register"><span class="glyphicon glyphicon-user"></span>Register</a></li>
               <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> 
@@ -42,3 +42,11 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+
+<script type="text/javascript">
+  function clearHistory(){
+    session
+    localStorage.history = '';
+    writefile()
+  }
+</script>>
