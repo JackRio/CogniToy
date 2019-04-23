@@ -178,7 +178,7 @@
 		<input type="checkbox" >
 		<span class="slider round"></span>
 	</label>  -->
-  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i onclick="volumetoggle(this)" class="fas fa-volume-mute" style="font-size:20px; margin-left: 3px;"></i></button>
+  <button  style="float:right; background-color:transparent; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i id ="audio"onclick="volumetoggle(this)" class="fas fa-volume-mute" style="font-size:20px; margin-left: 3px;"></i></button>
 
   
   
@@ -285,49 +285,7 @@
 <script src='https://unpkg.com/rxcss@0.9.0/dist/rxcss.min.js'></script>
 <script  src = "{{ url_for('static', filename = 'js/huskyjs.js') }}"></script>
 
-<script>
-  function volumetoggle(x) {
-  x.classList.toggle("fa-volume-up");
-}
 
-
-  function startDictation() {
-
-    var x = document.getElementById("mic");
-      
-    
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-      x.style.color = "red";
-      var recognition = new webkitSpeechRecognition();
-
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = "hi-IN";
-      recognition.gender = 'm'
-      recognition.start();
-
-      recognition.onresult = function(e) {
-        document.getElementById('textmsg').value = e.results[0][0].transcript;
-        x.style.color = "black";
-        recognition.stop();
-        <!-- document.getElementById('labnol').submit();-->
-      };
-
-      recognition.onerror = function(e) {
-        x.style.color = "black";
-        recognition.stop();
-
-      }
-      recognition.onend = function() {
-        x.style.color = "black";
-
-      }
-
-    }
-
-  }
-</script>
-
-<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat.js') }}"></script>
 
 {% endblock %}
