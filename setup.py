@@ -275,8 +275,6 @@ def giveDefine(response):
 
 
 
-
-
 @app.route('/start')
 def start():
 	string = ''
@@ -305,10 +303,9 @@ def conversation():
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
 			g.res += ele['text'] + '$'
-	
+
 	if(response["output"]["intents"]):
 		tag_to_func(response["output"]["intents"][0]["intent"],response)
-
 	return g.res[:-1]	
 
 if __name__ == '__main__':
