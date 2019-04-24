@@ -1,3 +1,171 @@
+/*Chat Box Styling*/
+  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
+  .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
+  .speech img {float: right; width: 40px }
+
+        .chat{
+        border: 3px ;
+        background-color: #76B2FC;
+        border-radius:6px;
+        padding: 4px;
+        margin: 5px 0;
+        margin-top:0;
+        height:560px;   
+        }
+        .chatlog{
+        height:450px;
+        padding:3px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+       
+      
+       }
+      
+      .chatlog::-webkit-scrollbar{
+        width:10px;
+
+        
+      }
+      .logbox{
+        display: table;
+        width: 100%;
+
+      }
+
+      .chatlog::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background: rgba(0,0,0,.2)
+        
+      }
+      .chat-form{
+        display:flex;    
+      align-items:flex-start;
+      }
+      .chat-form textarea{
+        height: 55px;
+        width:80%;
+        
+        border-radius: 5px;
+        margin-left: 10px;
+        margin-top: 5px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+      }
+
+      .chat-form textarea::-webkit-scrollbar{
+        width:8px;
+
+        
+      }
+
+      .chat-form textarea::-webkit-scrollbar-thumb{
+        border-radius: 4px;
+        background: rgba(0,0,0,.3)
+        
+      }
+     
+      
+    .logcontainer {
+      border: 2px solid #dedede;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 3px;
+      margin: 5px 0;
+      max-width: 80%;
+      display: table;
+      float:left;
+
+       
+    }
+
+    .child {
+      border-color: #ccc;
+      background-color: #ddd;
+      text-align: right;
+      float:right;
+
+    }
+
+
+    .logcontainer::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    
+
+    .time {
+      float: right;
+      color: #aaa;
+    }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 11px;
+    display: flex;
+    float:right;
+  }
+
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 8px;
+    width: 8px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(13px);
+    -ms-transform: translateX(13px);
+    transform: translateX(13px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 50px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  } 
+
+
+
+/*Husky Styling*/
+
 @-webkit-keyframes head {
   0% {
     -webkit-transform: rotate(0);
