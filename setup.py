@@ -34,7 +34,7 @@ service = watson_developer_cloud.AssistantV2(
 	version = d.version
 )
 assistant_id = d.assistant_id
-session_id = g.session_id
+
 session_id = service.create_session(
     assistant_id = assistant_id
     ).get_result()['session_id']
