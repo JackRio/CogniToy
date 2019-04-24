@@ -39,7 +39,7 @@ session_id = service.create_session(
     assistant_id = assistant_id
     ).get_result()['session_id']
 
-sec_q=[(1,"Which phone number do you remember most from your childhood?"),(2,"What was your favorite place to visit as a child?"),(3,"Who is your favorite actor, musician, or artist?"),(4,"What is the name of your favorite pet?"),(5,"In what city were you born?"),(6,"What high school did you attend?"),(7,"What is the name of your first school?"),(8,"What is your favorite movie?"),(9,"What is your mother's maiden name?")]
+sec_q=[("phone no.","Which phone number do you remember most from your childhood?"),("place","What was your favorite place to visit as a child?"),("celib","Who is your favorite actor, musician, or artist?"),("pet","What is the name of your favorite pet?"),("city","In what city were you born?"),("high school","What high school did you attend?"),("first school","What is the name of your first school?"),("movie","What is your favorite movie?"),("maiden","What is your mother's maiden name?")]
 
 # games
 @app.route('/game1')
@@ -82,93 +82,95 @@ def chatlog():
 
 # Register Form Class
 class RegisterForm(Form):
-    f_name = StringField('Father Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
-    f_contact = IntegerField('Father Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
-    f_email = StringField('Father Email Id', [validators.Email()])
+    f_name = StringField(' Father Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
+    f_contact = IntegerField(' Father Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
+    f_email = StringField(' Father Email Id', [validators.Email()])
     
-    m_name = StringField('Mother Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
-    m_contact = IntegerField('Mother Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
-    m_email = StringField('Mother Email Id', [validators.Email()])
+    m_name = StringField(' Mother Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
+    m_contact = IntegerField(' Mother Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
+    m_email = StringField(' Mother Email Id', [validators.Email()])
     
-    username = StringField('Username', [validators.DataRequired(),validators.Length(min=4, max=20)])
-    password = PasswordField('Password', [
+    username = StringField(' Username', [validators.DataRequired(),validators.Length(min=4, max=20)])
+    password = PasswordField(' Password', [
         validators.Length(min=4, max=20),
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
-    confirm = PasswordField('Confirm Password',[validators.DataRequired()])
+    confirm = PasswordField(' Confirm Password',[validators.DataRequired()])
     
     # Sec_Q = StringField('Security Question', [validators.Length(min=5, max=20)])
-    Sec_A = StringField('Security Answer', [validators.DataRequired(),validators.Length(min=4, max=20)])
-    Sec_Q = SelectField('Security Question', choices =sec_q)
-    Address = TextAreaField('Address',[validators.Length(min = 2,message="Enter Address")])
+    Sec_A = StringField(' Security Answer', [validators.DataRequired(),validators.Length(min=4, max=20)])
+    Sec_Q = SelectField(' Security Question', choices =sec_q)
+    Address = TextAreaField(' Address',[validators.Length(min = 2,message="Enter Address")])
     
 # User Register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegisterForm(request.form)
-    if request.method == 'POST' and form.validate():
-        f_name = form.f_name.data
-        f_email = form.f_email.data
-        f_contact = form.f_contact.data
-        
-        m_name = form.m_name.data
-        m_email = form.m_email.data
-        m_contact = form.m_contact.data
-        
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
+	form = RegisterForm(request.form)
+	if request.method == 'POST' and form.validate():
+		f_name = form.f_name.data
+		f_email = form.f_email.data
+		f_contact = form.f_contact.data
 
-        Sec_Q = form.Sec_Q.data
-        Sec_A = form.Sec_A.data
+		m_name = form.m_name.data
+		m_email = form.m_email.data
+		m_contact = form.m_contact.data
 
-        Address =form.Address.data
-        
-        # Create cursor
-        cur = mysql.connection.cursor()
-        x = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
+		username = form.username.data
+		password = sha256_crypt.encrypt(str(form.password.data))
+		Sec_Q = form.Sec_Q.data
+		Sec_A = form.Sec_A.data
 
-        if x > 0:
-            error = "Username not available, please choose another"
-            return render_template('register.html',error = error,form=form)
-        # Execute query
-        cur.execute("INSERT INTO parent(`username`, `password`, `f_name`, `f_email`, `f_contact`, `m_name`, `m_email`, `m_contact`, `Sec_Q`, `Sec_A`,`address`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)", (username, password, f_name, f_email, f_contact, m_name, m_email, m_contact, Sec_Q, Sec_A,Address))
+		Address =form.Address.data
 
-        # Commit to DB
-        mysql.connection.commit()
+		# Create cursor
+		cur = mysql.connection.cursor()
+		x = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
 
-        # Close connection
-        cur.close()
+		if x > 0:
+		    error = "Username not available, please choose another"
+		    return render_template('register.html',error = error,form=form)
+		# Execute query
+		cur.execute("INSERT INTO parent(`username`, `password`, `f_name`, `f_email`, `f_contact`, `m_name`, `m_email`, `m_contact`, `Sec_Q`, `Sec_A`,`address`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)", (username, password, f_name, f_email, f_contact, m_name, m_email, m_contact, Sec_Q, Sec_A,Address))
 
-        flash('Registration Succefully, login to continue', 'success')
+		# Commit to DB
+		mysql.connection.commit()
 
-        return redirect(url_for('login'))
-    else:
-    	error = 'Some error occured'
-    	return render_template('register.html', form=form, error=error)
+		# Close connection
+		cur.close()
 
-class ChildDetail(Form):
-    fname = StringField('First Name', [validators.Length(min =1, max=50)])
-    # lname = StringField('Last Name', [validators.Length(min =1, max=50)])
-    # #nickname = StringField('Nick Name', [validators.Length( max=50)])
-    # dob = DateTimeField('Birthday', format='%d/%m/%y')
-    # gender = RadioField('Gender', choices = [('M','Male'),('F','Female')])
-    # grade = SelectField('Grade', choices = [('KinderGarden'),('1st'),('2nd'),('3rd'),('4th'),('5th'),('6th'),('7th'),('8th'),('9th')])
-# User login
+		flash('Registration Succefully, login to continue', 'success')
 
-@app.route('/childdetail', methods=['GET', 'POST'])
-def childdetail():
-    # render_template('childdetails.html')
-    form1 = ChildDetail(request.form)
-    if request.method == 'POST' and form.validate():
-        fname = form.fname.data
-        # lname = form.lname.data
-        # #nickname = form.nickname.data
-        # # dob = form.dob.data
-        # gender = form.gender.data
-        # grade = form.garde.data
-        return redirect(url_for('home')) 
-    return render_template('childdetails.html',form=form1)
+		return redirect(url_for('login'))
+	else:
+		if request.method == 'POST' and not form.validate():
+			error = 'Some error occured'
+			return render_template('register.html', form=form, error=error)
+		return render_template('register.html', form=form)
+
+
+# class ChildDetail(Form):
+#     fname = StringField('First Name', [validators.Length(min =1, max=50)])
+#     # lname = StringField('Last Name', [validators.Length(min =1, max=50)])
+#     # #nickname = StringField('Nick Name', [validators.Length( max=50)])
+#     # dob = DateTimeField('Birthday', format='%d/%m/%y')
+#     # gender = RadioField('Gender', choices = [('M','Male'),('F','Female')])
+#     # grade = SelectField('Grade', choices = [('KinderGarden'),('1st'),('2nd'),('3rd'),('4th'),('5th'),('6th'),('7th'),('8th'),('9th')])
+# # User login
+
+# @app.route('/childdetail', methods=['GET', 'POST'])
+# def childdetail():
+#     # render_template('childdetails.html')
+#     form1 = ChildDetail(request.form)
+#     if request.method == 'POST' and form.validate():
+#         fname = form.fname.data
+#         # lname = form.lname.data
+#         # #nickname = form.nickname.data
+#         # # dob = form.dob.data
+#         # gender = form.gender.data
+#         # grade = form.garde.data
+#         return redirect(url_for('home')) 
+#     return render_template('childdetails.html',form=form1)
 # User login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
