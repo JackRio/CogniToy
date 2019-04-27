@@ -27,7 +27,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # init MYSQL
 mysql = MySQL(app)
 
-
 service = watson_developer_cloud.AssistantV2(
 	username = d.username, 
 	password = d.password,
@@ -35,7 +34,7 @@ service = watson_developer_cloud.AssistantV2(
 )
 assistant_id = d.assistant_id
 
-session_id = service.create_session(
+g.session_id = service.create_session(
     assistant_id = assistant_id
     ).get_result()['session_id']
 
@@ -200,7 +199,6 @@ def login():
                 # Passed
                 session['logged_in'] = True
                 session['username'] = username
-
                 flash('You are now logged in', 'success')
                 return redirect(url_for('chat'))
             else:
@@ -229,9 +227,9 @@ def is_logged_in(f):
 @app.route('/logout')
 @is_logged_in
 def logout():
-    session.clear()
-    flash('You are now logged out', 'success')
-    return redirect(url_for('login'))
+	session.clear()
+	flash('You are now logged out', 'success')
+	return redirect(url_for('login'))
 
 
 def tag_to_func(tag,response):
@@ -290,7 +288,7 @@ def conversation():
 	sentence = query['question']
 	response = service.message(
 		assistant_id,
-		session_id,
+		g.session_id,
 		input = {
 			'text': sentence,
 			'options': {
@@ -299,7 +297,7 @@ def conversation():
 		},
 		context = g.context
 	).get_result()
-	g.res = session_id + "$"
+	g.res = ""
 	
 	g.context = response['context']
 	for ele in response['output']['generic']:
@@ -314,7 +312,7 @@ def conversation():
 if __name__ == '__main__':
 	g.init_response = service.message(
 		assistant_id,
-		session_id,
+		g.session_id,
 		input = {
 			'text': '',
 			'options': {
@@ -328,5 +326,5 @@ if __name__ == '__main__':
 
 	service.delete_session(
 		assistant_id = assistant_id,
-		session_id = session_id
+		session_id = g.session_id
 	)
