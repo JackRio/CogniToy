@@ -7,24 +7,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Jr. Jarvis</a>
+          <a class="navbar-brand" href="/">Jr. Jarvis</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="/" >Home</a></li>
             {% if session.logged_in %}
             <li><a href="/chat">Chat</a></li>
-            <li><a href="/chatlog">Chatlog</a></li>
-            <li><a href="/childdetail">Childdetail</a></li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">Games
               <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/g_circuit">circuit</a></li>
+                <li><a href="/g_circuit">Circuit</a></li>
                 <li><a href="/g_poll">8 Ball Pool</a></li>
-                <li><a href="/g_bloxorz">bloxorz</a></li>
+                <li><a href="/g_bloxorz">Bloxorz</a></li>
               </ul>
             </li>
+            <li><a href="/chatlog">Chatlog</a></li>
+            <li><a href="/childdetail">Childdetail</a></li>
             {% endif %}
             <li><a href="/about">About</a></li>
           </ul>
