@@ -200,7 +200,7 @@ def login():
                 session['logged_in'] = True
                 session['username'] = username
                 flash('You are now logged in', 'success')
-                return redirect(url_for('chat'))
+                return redirect(('chat'))
             else:
                 error = 'Invalid Password'
                 return render_template('login.html', error=error)
@@ -228,6 +228,17 @@ def is_logged_in(f):
 @is_logged_in
 def logout():
 	session.clear()
+	service.message(
+	assistant_id,
+	g.session_id,
+	input = {
+		'text': '',
+		'options': {
+			'return_context': True
+		}
+	},
+	context = None
+	).get_result()
 	flash('You are now logged out', 'success')
 	return redirect(url_for('login'))
 
@@ -298,7 +309,7 @@ def conversation():
 		context = g.context
 	).get_result()
 	g.res = ""
-	
+	print(response)
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
@@ -319,7 +330,6 @@ if __name__ == '__main__':
 				'return_context': True
 			}
 		},
-		context = g.context
 	).get_result()
 
 	app.run(debug = True)
