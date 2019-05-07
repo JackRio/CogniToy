@@ -41,24 +41,30 @@ g.session_id = service.create_session(
 sec_q=[("phone no.","Which phone number do you remember most from your childhood?"),("place","What was your favorite place to visit as a child?"),("celib","Who is your favorite actor, musician, or artist?"),("pet","What is the name of your favorite pet?"),("city","In what city were you born?"),("high school","What high school did you attend?"),("first school","What is the name of your first school?"),("movie","What is your favorite movie?"),("maiden","What is your mother's maiden name?")]
 
 # games
-@app.route('/g_alphattack')
-def g_alphattack():
-    return render_template('g_alphattack.html')
-
-@app.route('/g_upbeat')
-def g_upbeat():
-    return render_template('g_up-beat.html')
-
-# games
-@app.route('/g_poll')
-def g_poll():
-    return render_template('g_poll.html')
+@app.route('/games/<string:id>/')
+def games(id):
+	gm = "games/"+str(id)+".html"
+	return render_template(gm)
 
 
-# games
-@app.route('/g_bloxorz')
-def g_bloxorz():
-    return render_template('g_bloxorz.html')
+# @app.route('/g_sequence')
+# def g_sequence():
+#     return render_template('g_sequence.html')
+
+# @app.route('/g_upbeat')
+# def g_upbeat():
+#     return render_template('g_up-beat.html')
+
+# # games
+# @app.route('/g_poll')
+# def g_poll():
+#     return render_template('g_poll.html')
+
+
+# # games
+# @app.route('/g_bloxorz')
+# def g_bloxorz():
+#     return render_template('g_bloxorz.html')
 
 
 
