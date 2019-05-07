@@ -31,7 +31,7 @@ function appendUserChat(string) {
 	}
 	$('.chatlog').append(txt);
 	// responsiveVoice.speak(string);
-	$('.chatlog').animate({scrollTop: 2000});
+	$('.chatlog').animate({scrollTop: 200000000});
 	$('#textmsg').val('');
 	
 
@@ -48,6 +48,7 @@ function appendBotChat(string) {
 		localStorage.history = txt;
 	}
 	$('.chatlog').append(txt);
+	$('.chatlog').animate({scrollTop: 200000000});
 	$('#textmsg').val('');
 
 }
@@ -67,7 +68,8 @@ function getResponse(string) {
 			var datastr = dataArr.join();
 			for(var i = 0;i<dataArr.length;i++){
 				appendBotChat(dataArr[i])
-				$(".chatlog").scrollTop(10000000000000);
+				$('.chatlog').animate({scrollTop: 200000000});
+
 			}
 			if(document.getElementById("audio").classList.contains("fa-volume-up"))
 			{
@@ -96,7 +98,7 @@ $(window).on('load', function() {
 						localStorage.history = txt;
 					}
 					$('.chatlog').append(txt);
-					$(".chatlog").scrollTop(10000000000000);
+					$('.chatlog').animate({scrollTop: 2000000});
 				}
 				if(document.getElementById("audio").classList.contains("fa-volume-up"))
 				{
