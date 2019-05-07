@@ -16,17 +16,21 @@
   
 
 	</h3>
-    <hr style="margin:1px">
+    <hr style="margin:2px">
 	<div class="chatlog" > 
 	<!-- chat comes hear -->
 	</div>
-    <hr style="margin:1px">
-    <div class="chat-form" >
-      <textarea id = 'textmsg' name = 'q' placeholder="Enter Message"></textarea>
-       <button onclick="startDictation()" style="background-color:transparent; font-size:24px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i id ="mic"class="fas fa-microphone" style="font-size:40px; margin-top: 10px;margin-left: 3px;margin-right: 2px"></i></button> 
-      <button id="sendbtn" style="width: 12%;margin-top: 9px; margin-bottom:  9px; margin-left:3px; border-radius: 11px;">
-      <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
-      send</button>
+    <hr style="margin:2px">
+    <div class="chat-form" style="background-color:#FFFFFF; border-radius: 20px;padding-left: 3px;">
+      <textarea id = 'textmsg' name = 'q' placeholder="Enter Message" style="border:none; border-right:2px solid #ccc; border-radius:0;  "></textarea>
+       <!-- <button onclick="startDictation()" style="background-color:transparent; font-size:24px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i id ="mic"class="fas fa-microphone" style="font-size:25px; margin-top: 10px;margin-left: 3px;margin-right: 2px"></i></button> 
+       -->
+       <button onclick="startDictation()"style="background-color: transparent; border: 0; margin-top: 8px; margin-bottom:  8px; margin-left:0px;padding:0; border-radius: 11px;">
+        <img src="static/mic_off.png" id ="mic" style="font-size:26px;"> 
+      </button>
+      <button id="sendbtn" style="background-color: transparent; border: 0; margin-top: 9px; margin-bottom:  9px;padding-left: 0; margin-left:0px; border-radius: 11px;">
+        <span class="glyphicon glyphicon-send" style="font-size:25px; padding-right: 5px; color: #000;"></span>
+      </button>
       <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
       <!-- <input onclick="responsiveVoice.speak('This is the text you want to speak');" type='button' value='🔊 Play' /> -->
 

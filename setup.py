@@ -41,21 +41,21 @@ g.session_id = service.create_session(
 sec_q=[("phone no.","Which phone number do you remember most from your childhood?"),("place","What was your favorite place to visit as a child?"),("celib","Who is your favorite actor, musician, or artist?"),("pet","What is the name of your favorite pet?"),("city","In what city were you born?"),("high school","What high school did you attend?"),("first school","What is the name of your first school?"),("movie","What is your favorite movie?"),("maiden","What is your mother's maiden name?")]
 
 # games
-@app.route('/game1')
-def game1():
-    return render_template('game1.html')
+@app.route('/g_circuit')
+def g_circuit():
+    return render_template('g_circuit.html')
 
 
 # games
-@app.route('/game2')
-def game2():
-    return render_template('game2.html')
+@app.route('/g_poll')
+def g_poll():
+    return render_template('g_poll.html')
 
 
 # games
-@app.route('/game3')
-def game3():
-    return render_template('game3.html')
+@app.route('/g_bloxorz')
+def g_bloxorz():
+    return render_template('g_bloxorz.html')
 
 
 

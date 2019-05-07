@@ -117,13 +117,14 @@ function volumetoggle(x) {
 }
 
 
+
   function startDictation() {
 
-    var x = document.getElementById("mic");
+    
       
     
     if (window.hasOwnProperty('webkitSpeechRecognition')) {
-      x.style.color = "red";
+      $('#mic').attr('src','static/mic_on.png');
       var recognition = new webkitSpeechRecognition();
 
       recognition.continuous = false;
@@ -134,37 +135,21 @@ function volumetoggle(x) {
 
       recognition.onresult = function(e) {
         document.getElementById('textmsg').value = e.results[0][0].transcript;
-        x.style.color = "black";
-        recognition.stop();
+        $('#mic').attr('src','static/mic_off.png');
+    	recognition.stop();
         <!-- document.getElementById('labnol').submit();-->
       };
 
       recognition.onerror = function(e) {
-        x.style.color = "black";
+        $('#mic').attr('src','static/mic_off.png');
         recognition.stop();
 
       }
       recognition.onend = function() {
-        x.style.color = "black";
-
+        $('#mic').attr('src','static/mic_off.png');
       }
 
     }
 
   }
 
-const { body } = document;
-const fullWidth = body.clientWidth;
-const fullHeight = body.clientHeight;
-
-const mouse$ = Rx.Observable
-  .fromEvent(body, 'mousemove')
-  .map(({ offsetX, offsetY }) => ({
-    x: offsetX / fullWidth,
-    y: offsetY / fullHeight
-  }));
-
-mouse$.subscribe(({ x, y }) => {
-  body.style.setProperty('--mouse-x', x);
-  body.style.setProperty('--mouse-y', y);
-});
