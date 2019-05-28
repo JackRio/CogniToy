@@ -3,6 +3,9 @@
   .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
   .speech img {float: right; width: 40px }
 
+        #textmsg:active{
+          border-color: black;
+        }
         .chat{
         border: 3px ;
         background-color: #76B2FC;

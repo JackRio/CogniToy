@@ -2,10 +2,10 @@
 
 {% block body %}
 
-  <div class="jumbotron text-center " >
-<div  >
+  <div class="jumbotron text-center " style=" margin-bottom: 0px; padding-bottom: 250px" >
 
-  <div class =" ChildrenHusk " style="float:  center;">
+<div >
+  <div class =" ChildrenHusk " style="padding-bottom: 15px;    padding-top: 0px;" >
   <div class="husky">
     <div class="mane">
       <div class="coat"></div>
@@ -88,5 +88,10 @@
 	</div>
   </div>
 
+<script src='https://unpkg.com/@reactivex/rxjs@5.0.0-rc.1/dist/global/Rx.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/rxjs-dom/7.0.3/rx.dom.min.js'></script>
+<script src='https://unpkg.com/rxcss@0.9.0/dist/rxcss.min.js'></script>
+
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat.js') }}"></script>
 
 {% endblock %}
