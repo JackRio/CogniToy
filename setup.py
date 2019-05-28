@@ -11,8 +11,10 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 import Scraping
 import os
+import wolframalpha
 
 
+wolfalpha = wolframalpha.Client("UPRE9P-WPWWUHQGEH")
 app = Flask(__name__)
 app.secret_key= os.urandom(5)
 CORS(app)
@@ -234,7 +236,7 @@ def logout():
 	input = {
 		'text': '',
 		'options': {
-			'return_context': True
+			'return_context': True		
 		}
 	},
 	context = None
@@ -263,6 +265,13 @@ def tellJoke(response):
     i = random.randint(0,len(respond)-1)
     g.res += respond[i]
 	
+def solveMath(sentence):
+	try:
+		solve = wolfalpha.query(sentence)
+		result = next(solve.results).text
+		g.res += result + "$"
+	except:
+		g.res += "Brain is damaged did you ask correct question?" + '$'
 
 def askRiddle(response):
 	
@@ -281,9 +290,6 @@ def giveDefine(response):
 		g.res += answer
 		if (random.uniform(0,1) > 0.65):
 			g.res += respond[i]
-
-
-
 
 
 @app.route('/start')
@@ -308,16 +314,22 @@ def conversation():
 		},
 		context = g.context
 	).get_result()
+
 	g.res = ""
-	print(response)
 	g.context = response['context']
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
 			g.res += ele['text'] + '$'
-	
 	if(response["output"]["intents"]):
 		tag_to_func(response["output"]["intents"][0]["intent"],response)
-
+	if response['context']['skills']['main skill']['user_defined']['tag']:
+		if response['context']['skills']['main skill']['user_defined']['tag'] == "maths":
+			solveMath(sentence)
+			response['context']['skills']['main skill']['user_defined']['tag'] = None
+		if response['context']['skills']['main skill']['user_defined']['tag'] == "Task":
+			for ele in response['output']['generic'][2]['options']:
+				g.res += ele['label'] +"$"
+				response['context']['skills']['main skill']['user_defined']['tag'] = None
 	return g.res[:-1]	
 
 if __name__ == '__main__':
