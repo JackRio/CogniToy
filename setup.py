@@ -9,10 +9,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField, RadioField, SelectField,DateTimeField
 from passlib.hash import sha256_crypt
 from functools import wraps
-import Scraping
-import os
-import wolframalpha
-
+import Scraping,os,wolframalpha,schedule
 
 wolfalpha = wolframalpha.Client("UPRE9P-WPWWUHQGEH")
 app = Flask(__name__)
@@ -36,9 +33,22 @@ service = watson_developer_cloud.AssistantV2(
 )
 assistant_id = d.assistant_id
 
-g.session_id = service.create_session(
-    assistant_id = assistant_id
-    ).get_result()['session_id']
+def createSession():
+	global assistant_id
+	g.session_id = service.create_session(
+    	assistant_id = assistant_id
+    	).get_result()['session_id']
+
+	g.init_response = service.message(
+		assistant_id,
+		g.session_id,
+		input = {
+			'text': '',
+			'options': {
+				'return_context': True
+			}
+		},
+	).get_result()
 
 sec_q=[("phone no.","Which phone number do you remember most from your childhood?"),("place","What was your favorite place to visit as a child?"),("celib","Who is your favorite actor, musician, or artist?"),("pet","What is the name of your favorite pet?"),("city","In what city were you born?"),("high school","What high school did you attend?"),("first school","What is the name of your first school?"),("movie","What is your favorite movie?"),("maiden","What is your mother's maiden name?")]
 
@@ -312,17 +322,32 @@ def start():
 def conversation():
 	query = request.get_json()
 	sentence = query['question']
-	response = service.message(
-		assistant_id,
-		g.session_id,
-		input = {
-			'text': sentence,
-			'options': {
-				'return_context': True
-			}
-		},
-		context = g.context
-	).get_result()
+	try:
+		response = service.message(
+			assistant_id,
+			g.session_id,
+			input = {
+				'text': sentence,
+				'options': {
+					'return_context': True
+				}
+			},
+			context = g.context
+		).get_result()
+	except:
+		createSession()
+		response = service.message(
+			assistant_id,
+			g.session_id,
+			input = {
+				'text': sentence,
+				'options': {
+					'return_context': True
+				}
+			},
+			context = g.context
+		).get_result()
+
 
 	g.res = ""
 	g.context = response['context']
@@ -342,16 +367,7 @@ def conversation():
 	return g.res[:-1]	
 
 if __name__ == '__main__':
-	g.init_response = service.message(
-		assistant_id,
-		g.session_id,
-		input = {
-			'text': '',
-			'options': {
-				'return_context': True
-			}
-		},
-	).get_result()
+	createSession()
 
 	app.run(debug = True)
 
