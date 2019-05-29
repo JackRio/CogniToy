@@ -274,6 +274,7 @@ def is_logged_in(f):
 @app.route('/logout')
 @is_logged_in
 def logout():
+	session.clear()
 	log = {
 	'username': session['username'],
 	'date':g.startTime,
