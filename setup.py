@@ -237,18 +237,43 @@ def register():
 # User login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method == 'POST':
-		# Get Form Fields
-		username = request.form['username']
-		password_candidate = request.form['password']
-		if len(username) == 0:
-		    error = 'Username is empty'
-		    return render_template('login.html', error=error)
-		elif len(password_candidate) == 0:
-		    error = 'Password is empty'
-		    return render_template('login.html', error=error)
-		# Create cursor
-		cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        # Get Form Fields
+        username = request.form['username']
+        password_candidate = request.form['password']
+        if len(username) == 0:
+            error = 'Username is empty'
+            return render_template('login.html', error=error)
+        elif len(password_candidate) == 0:
+            error = 'Password is empty'
+            return render_template('login.html', error=error)
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Get user by username
+        result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
+
+        if result > 0:
+            # Get stored hash
+            data = cur.fetchone()
+            password = data['password']
+
+            # Compare Passwords
+            if sha256_crypt.verify(password_candidate, password):
+                # Passed
+                session['logged_in'] = True
+                session['username'] = username
+
+                flash('You are now logged in', 'success')
+                return redirect(('chat'))
+            else:
+                error = 'Invalid Password'
+                return render_template('login.html', error=error)
+            # Close connection
+            cur.close()
+        else:
+            error = 'Username not found'
+            return render_template('login.html', error=error)
 
 		# Get user by username
 		result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])

@@ -121,37 +121,75 @@ function volumetoggle(x) {
 
 
   function startDictation() {
+  	if($('#mic').attr('src')=='static/mic_off.png'){
+  		
+	    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+	      $('#mic').attr('src','static/mic_on.png');
+	      var recognition = new webkitSpeechRecognition();
 
-    
-      
-    
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-      $('#mic').attr('src','static/mic_on.png');
-      var recognition = new webkitSpeechRecognition();
+	      recognition.continuous = false;
+	      recognition.interimResults = false;
+	      recognition.lang = "en-US";
+	      recognition.gender = 'm'
+	      recognition.start();
 
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = "en-US";
-      recognition.gender = 'm'
-      recognition.start();
+	      recognition.onresult = function(e) {
+	        document.getElementById('textmsg').value = e.results[0][0].transcript;
+	        $('#mic').attr('src','static/mic_off.png');
+	    	recognition.stop();
+	        <!-- document.getElementById('labnol').submit();-->
+	      };
 
-      recognition.onresult = function(e) {
-        document.getElementById('textmsg').value = e.results[0][0].transcript;
-        $('#mic').attr('src','static/mic_off.png');
-    	recognition.stop();
-        <!-- document.getElementById('labnol').submit();-->
-      };
+	      recognition.onerror = function(e) {
+	        $('#mic').attr('src','static/mic_off.png');
+	        recognition.stop();
 
-      recognition.onerror = function(e) {
-        $('#mic').attr('src','static/mic_off.png');
-        recognition.stop();
+	      }
+	      recognition.onend = function() {
+	        $('#mic').attr('src','static/mic_off.png');
+	      }
 
-      }
-      recognition.onend = function() {
-        $('#mic').attr('src','static/mic_off.png');
-      }
-
-    }
+	    }
+	}
 
   }
+
+
+
+  // function startDictation() {   
+    
+  //   if (window.hasOwnProperty('webkitSpeechRecognition')) {
+  //     $('#mic').attr('src','static/mic_on.png');
+  //     var recognition = new webkitSpeechRecognition();
+
+  //     recognition.continuous = false;
+  //     recognition.interimResults = false;
+  //     recognition.lang = "en-US";
+  //     recognition.gender = 'm';
+  //     recognition.start();
+
+  //     speech_start(recognition);
+
+  //   }
+
+  // }
+
+  // function speech_start(recognition) {
+  // 	console.log(recognition);
+
+  // 	 recognition.onresult = function(e) {
+  //       document.getElementById('textmsg').value = e.results[0][0].transcript;
+  //       $('#mic').attr('src','static/mic_off.png');
+  //   	recognition.stop();
+  //       <!-- document.getElementById('labnol').submit();-->
+  //     };
+
+
+  //     recognition.onspeechend = function(e) {
+ 	// 	recognition.stop();
+ 	// 	console.log(e)
+ 	// 	$('#mic').attr('src','static/mic_off.png');
+	 //  }
+
+  // }
 
