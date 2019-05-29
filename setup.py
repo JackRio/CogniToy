@@ -10,6 +10,7 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators,
 from passlib.hash import sha256_crypt
 from functools import wraps
 import Scraping,os,wolframalpha,schedule
+import time
 
 wolfalpha = wolframalpha.Client("UPRE9P-WPWWUHQGEH")
 app = Flask(__name__)
@@ -220,6 +221,7 @@ def login():
                 # Passed
                 session['logged_in'] = True
                 session['username'] = username
+                time.sleep(0.5)
                 flash('You are now logged in', 'success')
                 return redirect(('chat'))
             else:

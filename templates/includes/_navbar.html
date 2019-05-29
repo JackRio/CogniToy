@@ -52,4 +52,7 @@
   function clearHistory(){
     localStorage.history = '';
   }
+  window.onclose = function{
+    clearHistory();
+  }
 </script>

@@ -5,6 +5,8 @@
 
         #textmsg:active{
           border-color: black;
+          border-width: 0;
+          padding: 0;
         }
         .chat{
         border: 3px ;
@@ -43,7 +45,9 @@
       .chat-form{
         display:flex;    
       align-items:flex-start;
+
       }
+      
       .chat-form textarea{
         height: 40px;
         width:80%;
@@ -53,7 +57,13 @@
         margin-top: 5px;
         overflow-x: hidden;
         overflow-y: scroll;
-
+        border:none;
+        padding:0;
+        border-right:2px solid #ccc;
+        border-radius:0; 
+        resize: none;
+        outline: none;
+   
       }
 
       .chat-form textarea::-webkit-scrollbar{
@@ -63,7 +73,7 @@
       }
 
       .chat-form textarea::-webkit-scrollbar-thumb{
-        border-radius: 4px;
+        border-radius: 0px;
         background: rgba(0,0,0,.3)
         
       }
