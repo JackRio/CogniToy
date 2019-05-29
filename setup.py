@@ -104,9 +104,26 @@ def about():
 def chat():
     return render_template('chat.html')
 
+@app.route('/chatlog/<string:id>')
+def ChatLogId(id):
+	for ele in g.resultatlas:
+		if ele['_id'] == id:
+			# ele['Chat']
+			pass
+
+
 @app.route('/chatlog')
 def chatlog():
-    return render_template('chatlog.html')
+	trim = []
+	sub = {}
+	for ele in g.resultatlas:
+		if ele['date']:
+			sub['_id'] = ele['_id']
+			sub['date'] = ele['date']
+			trim.append(sub)
+			sub = {}
+	# Trim has data
+	return render_template('chatlog.html')
 
 # Register Form Class
 class RegisterForm(Form):
@@ -229,6 +246,8 @@ def login():
                 session['logged_in'] = True
                 session['username'] = username
                 createSession()
+                g.resultatlas = records.find(filter = {'username': session['username']},batch_size = 10)
+
                 flash('You are now logged in', 'success')
                 return redirect(('chat'))
             else:
@@ -258,7 +277,7 @@ def is_logged_in(f):
 @is_logged_in
 def logout():
 	log = {
-	'session_id': session['username'],
+	'username': session['username'],
 	'date':g.startTime,
 	'Chat': g.chatArr
 	}
@@ -395,6 +414,7 @@ def conversation():
 if __name__ == '__main__':
 
 	app.run(debug = True)
+
 	service.delete_session(
 		assistant_id = assistant_id,
 		session_id = g.session_id

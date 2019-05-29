@@ -46,7 +46,7 @@
 
 
 						# JSON Format
-# {
+# response = {
 #   "output": {
 #     "generic": [
 #       {

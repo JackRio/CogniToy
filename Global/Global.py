@@ -6,3 +6,4 @@ res = ''
 session_id = ''
 chatArr = []
 startTime = ''
+resultatlas = ''
