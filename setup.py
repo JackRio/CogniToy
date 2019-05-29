@@ -6,13 +6,20 @@ from Details import Details as d
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from flask_cors import CORS
 from flask_mysqldb import MySQL
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField, RadioField, SelectField,DateTimeField
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField,SelectField
 from passlib.hash import sha256_crypt
 from functools import wraps
-import Scraping,os,wolframalpha,schedule
-import time
+import Scraping,os,wolframalpha
+from datetime import datetime
+from pymongo import MongoClient
+
+client = MongoClient("mongodb+srv://Sanyog:Sanyog10@jarviscluster-inwgn.mongodb.net/test?retryWrites=true")
+
+db = client.get_database('Jarvis')
+records = db.ChatLog
 
 wolfalpha = wolframalpha.Client("UPRE9P-WPWWUHQGEH")
+
 app = Flask(__name__)
 app.secret_key= os.urandom(5)
 CORS(app)
@@ -97,9 +104,26 @@ def about():
 def chat():
     return render_template('chat.html')
 
+@app.route('/chatlog/<string:id>')
+def ChatLogId(id):
+	for ele in g.resultatlas:
+		if ele['_id'] == id:
+			# ele['Chat']
+			pass
+
+
 @app.route('/chatlog')
 def chatlog():
-    return render_template('chatlog.html')
+	trim = []
+	sub = {}
+	for ele in g.resultatlas:
+		if ele['date']:
+			sub['_id'] = ele['_id']
+			sub['date'] = ele['date']
+			trim.append(sub)
+			sub = {}
+	# Trim has data
+	return render_template('chatlog.html')
 
 # Register Form Class
 class RegisterForm(Form):
@@ -221,7 +245,7 @@ def login():
                 # Passed
                 session['logged_in'] = True
                 session['username'] = username
-                time.sleep(0.5)
+
                 flash('You are now logged in', 'success')
                 return redirect(('chat'))
             else:
@@ -250,18 +274,15 @@ def is_logged_in(f):
 @app.route('/logout')
 @is_logged_in
 def logout():
-	session.clear()
-	service.message(
-	assistant_id,
-	g.session_id,
-	input = {
-		'text': '',
-		'options': {
-			'return_context': True		
-		}
-	},
-	context = None
-	).get_result()
+	log = {
+	'username': session['username'],
+	'date':g.startTime,
+	'Chat': g.chatArr
+	}
+	records.insert_one(log)
+
+	g.chatArr,g.startTime = [],''
+
 	flash('You are now logged out', 'success')
 	return redirect(url_for('login'))
 
@@ -313,12 +334,28 @@ def giveDefine(response):
 			g.res += respond[i]
 
 
+def appendChatLog(child,bot):
+	chats = {'speaker': 'child','chat':child,'timestamp':datetime.now().strftime('%H:%M')}
+	g.chatArr.append(chats)
+	for _ in bot.split('$'):
+		chats = {'speaker': 'Bot','chat':_,'timestamp':datetime.now().strftime('%H:%M')}
+		g.chatArr.append(chats)
+
 @app.route('/start')
 def start():
 	string = ''
 	for text in g.init_response['output']['generic']: 
 		string += text['text'] + '$'
-	return string[:-1]
+	
+	string_temp = string[:-1]
+	
+	for _ in string_temp.split('$'):
+		chats = {'speaker': 'Bot','chat':_,'timestamp':datetime.now().strftime('%H:%M')}
+		g.chatArr.append(chats)
+	
+	g.startTime = datetime.now().strftime('%d:%b:%Y %H:%M')
+
+	return string_temp
 
 @app.route('/conversation', methods = ['POST'])
 def conversation():
@@ -356,8 +393,10 @@ def conversation():
 	for ele in response['output']['generic']:
 		if ele['response_type'] == 'text' and ele['text']:
 			g.res += ele['text'] + '$'
+
 	if(response["output"]["intents"]):
 		tag_to_func(response["output"]["intents"][0]["intent"],response)
+	
 	if response['context']['skills']['main skill']['user_defined']['tag']:
 		if response['context']['skills']['main skill']['user_defined']['tag'] == "maths":
 			solveMath(sentence)
@@ -366,14 +405,16 @@ def conversation():
 			for ele in response['output']['generic'][2]['options']:
 				g.res += ele['label'] +"$"
 				response['context']['skills']['main skill']['user_defined']['tag'] = None
+	
+	appendChatLog(sentence,g.res[:-1])
 	return g.res[:-1]	
 
 if __name__ == '__main__':
-	createSession()
 
 	app.run(debug = True)
 
 	service.delete_session(
 		assistant_id = assistant_id,
 		session_id = g.session_id
+
 	)
