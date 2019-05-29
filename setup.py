@@ -1,17 +1,19 @@
-import watson_developer_cloud
-import random
+import random,Scraping,os,wolframalpha,watson_developer_cloud,socket
 from Global import Global as g
 from Connector import Connector as c
 from Details import Details as d
 from flask import Flask, render_template, flash, redirect, url_for, session, request
+from flask_mail import Mail,Message
+from itsdangerous import URLSafeTimedSerializer,BadTimeSignature,SignatureExpired
 from flask_cors import CORS
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField,SelectField
 from passlib.hash import sha256_crypt
 from functools import wraps
-import Scraping,os,wolframalpha
 from datetime import datetime
 from pymongo import MongoClient
+
+socket.getaddrinfo('localhost', 8080)
 
 client = MongoClient("mongodb+srv://Sanyog:Sanyog10@jarviscluster-inwgn.mongodb.net/test?retryWrites=true")
 
@@ -22,7 +24,12 @@ wolfalpha = wolframalpha.Client("UPRE9P-WPWWUHQGEH")
 
 app = Flask(__name__)
 app.secret_key= os.urandom(5)
+app.config.from_pyfile('config.cfg')
 CORS(app)
+
+mail = Mail(app)
+
+emailKey = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 # Config MySQL
@@ -58,7 +65,18 @@ def createSession():
 		},
 	).get_result()
 
+
 sec_q=[("phone no.","Which phone number do you remember most from your childhood?"),("place","What was your favorite place to visit as a child?"),("celib","Who is your favorite actor, musician, or artist?"),("pet","What is the name of your favorite pet?"),("city","In what city were you born?"),("high school","What high school did you attend?"),("first school","What is the name of your first school?"),("movie","What is your favorite movie?"),("maiden","What is your mother's maiden name?")]
+
+
+def sendMail(f_email,m_email,username):
+	token = emailKey.dumps(username,salt = 'email-confirm')
+
+	msg = Message('Confirm Email',sender = 'jrjarvisverify@gmail.com',recipients = [f_email,m_email])
+	link = url_for('confirm_email',token = token,_external = True)
+
+	msg.body = 'Verification link is {}'.format(link)
+	mail.send(msg)
 
 # games
 @app.route('/games/<string:id>/')
@@ -183,10 +201,10 @@ def register():
 
 		# Close connection
 		cur.close()
-
-		flash('Registration Succefully, login to continue', 'success')
-
-		return redirect(url_for('login'))
+		
+		sendMail(f_email,m_email,username)
+		flash('Registration Succefully,Verify email to login', 'success')
+		return redirect(url_for('/'))
 	else:
 		if request.method == 'POST' and not form.validate():
 			error = 'Some error occured'
@@ -219,47 +237,71 @@ def register():
 # User login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        # Get Form Fields
-        username = request.form['username']
-        password_candidate = request.form['password']
-        if len(username) == 0:
-            error = 'Username is empty'
-            return render_template('login.html', error=error)
-        elif len(password_candidate) == 0:
-            error = 'Password is empty'
-            return render_template('login.html', error=error)
-        # Create cursor
-        cur = mysql.connection.cursor()
+	if request.method == 'POST':
+		# Get Form Fields
+		username = request.form['username']
+		password_candidate = request.form['password']
+		if len(username) == 0:
+		    error = 'Username is empty'
+		    return render_template('login.html', error=error)
+		elif len(password_candidate) == 0:
+		    error = 'Password is empty'
+		    return render_template('login.html', error=error)
+		# Create cursor
+		cur = mysql.connection.cursor()
 
-        # Get user by username
-        result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
+		# Get user by username
+		result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
+		data = cur.fetchone()
+		if result > 0:
+			# Get stored hash
+			
+			password = data['password']
+			confirm = data['verified']
+			if confirm:
+				if sha256_crypt.verify(password_candidate, password):
+					# Passed
+					session['logged_in'] = True
+					session['username'] = username
+					createSession()
+					g.resultatlas = records.find(filter = {'username': session['username']},batch_size = 10)
 
-        if result > 0:
-            # Get stored hash
-            data = cur.fetchone()
-            password = data['password']
+					flash('You are now logged in', 'success')
+					return redirect(('chat'))
+				else:
+					error = 'Invalid Password'
+					return render_template('login.html', error=error)
+			else:
+				sendMail(data['f_email'],data['m_email'],username)
+				error = 'Email not verified'
+				return render_template('login.html', error=error)
 
-            # Compare Passwords
-            if sha256_crypt.verify(password_candidate, password):
-                # Passed
-                session['logged_in'] = True
-                session['username'] = username
-                createSession()
-                g.resultatlas = records.find(filter = {'username': session['username']},batch_size = 10)
+			# Close connection
+			cur.close()
+		else:
+			error = 'Username not found'
+			return render_template('login.html', error=error)
 
-                flash('You are now logged in', 'success')
-                return redirect(('chat'))
-            else:
-                error = 'Invalid Password'
-                return render_template('login.html', error=error)
-            # Close connection
-            cur.close()
-        else:
-            error = 'Username not found'
-            return render_template('login.html', error=error)
+	return render_template('login.html')
 
-    return render_template('login.html')
+@app.route('/login/<token>')
+def confirm_email(token):
+	try:
+		username = emailKey.loads(token, salt ='email-confirm', max_age = 3600)
+	except SignatureExpired:
+		cur = mysql.connection.cursor()
+		result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [username])
+		
+		if result > 0:
+			mails = cur.fetchone()
+			sendMail(mails['f_email'],mails['m_email'],username)
+		
+		return '<h1> Link has expired sending it again, Verify new link within 30 minutes</h1>'
+	except BadTimeSignature:
+		return'<h1>Link is incorrect</h1>'
+	cur.execute("UPDATE parent SET verified = 1 WHERE username = %s",[username])
+	success = "Linked verified login to continue"
+	return render_template('login.html',success)
 
 # Check if user logged in
 def is_logged_in(f):
@@ -274,7 +316,7 @@ def is_logged_in(f):
 
 # Logout
 @app.route('/logout')
-@is_logged_in
+# @is_logged_in
 def logout():
 	log = {
 	'username': session['username'],
