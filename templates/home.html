@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/husky.css') }}">
 
   <div class="jumbotron text-center " style=" margin-bottom: 0px; padding-bottom: 250px" >
 
@@ -92,6 +93,6 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/rxjs-dom/7.0.3/rx.dom.min.js'></script>
 <script src='https://unpkg.com/rxcss@0.9.0/dist/rxcss.min.js'></script>
 
-<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat.js') }}"></script>
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/husky.js') }}"></script>
 
 {% endblock %}
