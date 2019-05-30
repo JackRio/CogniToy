@@ -2,7 +2,7 @@ import random,Scraping,os,wolframalpha,watson_developer_cloud,socket
 from Global import Global as g
 from Connector import Connector as c
 from Details import Details as d
-from flask import Flask, render_template, flash, redirect, url_for, session, request
+from flask import Flask, render_template, flash, redirect, url_for, session, request,Markup
 from flask_mail import Mail,Message
 from itsdangerous import URLSafeTimedSerializer,BadTimeSignature,SignatureExpired
 from flask_cors import CORS
@@ -124,32 +124,42 @@ def about():
 def chat():
     return render_template('chat.html')
 
-@app.route('/chatlog/<string:id>')
-@is_logged_in
-def ChatLogId(id):
-	for ele in g.resultatlas:
-		if ele['_id'] == id:
-			# ele['Chat']
-			pass
+# @app.route('/chatlog/<string:id>')
+# @is_logged_in
+# def ChatLogId(id):
+# 	for ele in g.resultatlas:
+# 		if ele['_id'] == id:
+# 			chatlog = ele['Chat']
+# 			return render_template('chatlog.html',chatlog=trim)		
 
 
 @app.route('/chatlog')
 @is_logged_in
 def chatlog():
-	trim = []
+	logresult = records.find(filter = {'username': session['username']},batch_size = 10)
 	sub = {}
-	for ele in g.resultatlas:
+	chat = []
+	count = 1;
+	section=''
+	# <li><a href="#section1">Section 1       12/11/18</a></li>
+	for ele in logresult:
 		if ele['date']:
-			sub['_id'] = ele['_id']
-			sub['date'] = ele['date']
-			trim.append(sub)
-			sub = {}
-	# Trim has data
-	return render_template('chatlog.html')
+			sub['id'] = count
+			
+			sub['date']=ele['date']
+			sub['chat']=ele['Chat']
+			# section = section + '<li><a href = #section'+str(count)+'>Section' +str(count)+ele['date']+'</a></li>' 
+			count = count+1
+			chat.append(sub)
+			sub={}
+	# section= Markup(section)
+	chat=Markup(chat)
+	return render_template('chatlog.html',chat =chat)
+
 
 # Register Form Class
 class RegisterForm(Form):
-    f_name = StringField(' Father Name')#, [validators.Length(min = 3, max=50,message="Invalid Name")])
+    f_name = StringField(' Father Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
     f_contact = IntegerField(' Father Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
     f_email = StringField(' Father Email Id', [validators.Email()])
     
@@ -247,7 +257,6 @@ def login():
 					session['logged_in'] = True
 					session['username'] = username
 					createSession()
-					g.resultatlas = records.find(filter = {'username': session['username']},batch_size = 10)
 
 					flash('You are now logged in', 'success')
 					return redirect(('chat'))
@@ -269,10 +278,10 @@ def login():
 
 @app.route('/login/<string:token>')
 def confirm_email(token):
+	cur = mysql.connection.cursor()
 	try:
 		username = emailKey.loads(token, salt ='email-confirm', max_age = 3600)
 	except SignatureExpired:
-		cur = mysql.connection.cursor()
 		result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [username])
 		cur.close()
 		if result > 0:
@@ -308,6 +317,46 @@ def logout():
 
 	flash('You are now logged out', 'success')
 	return redirect(url_for('login'))
+# reset password
+class resetpassword(Form):
+	password = PasswordField(' Password', [
+		validators.Length(min=4, max=20),
+		validators.DataRequired(),
+		validators.EqualTo('confirm', message='Passwords do not match')
+	])
+	confirm = PasswordField(' Confirm Password',[validators.DataRequired()])
+
+@app.route('/reset/<string:id>')
+@is_logged_out
+def reset(id):
+	form = resetpassword(request.form)
+	cur = mysql.connection.cursor()
+
+	if request.method == 'POST' and form.validate():
+		password = sha256_crypt.encrypt(str(form.password.data))
+		try:
+			username = emailKey.loads(token, salt ='email-confirm', max_age = 300)
+		except SignatureExpired:
+			result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [username])
+			cur.close()
+			if result > 0:
+				mails = cur.fetchone()
+				sendMail(mails['f_email'],mails['m_email'],username)
+			flash('Link has expired, reset password with new link. Verify within 5 min.','error')
+			return redirect(url_for('index'))
+		except BadTimeSignature:
+			flash('Invalid link','error')
+			return redirect(url_for('index'))
+		cur.execute("UPDATE parent SET password = %s WHERE username = %s",(password,username))
+		mysql.connection.commit()
+		cur.close()
+		flash('Password reset Succefully, login to continue', 'success')
+		return redirect(url_for('login'))		
+	else:
+		if request.method == 'POST' and not form.validate():
+			error = 'Some error occured, please retry after some time'
+			return render_template('reset.html', form=form, error=error)
+		return render_template('reset.html', form=form)
 
 
 def tag_to_func(tag,response):
