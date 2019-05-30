@@ -1,4 +1,4 @@
-$('#sendbtn').click(sendQuestion);
+$('#sendbtn').bind("click", {isSendBtnClicked: "true"}, sendQuestion);
 $('#textmsg').keypress(sendQuestion);
 
 var userSectionId = 0;
@@ -6,9 +6,9 @@ var botSectionId = 0;
 
 function sendQuestion(e) {
 	var id = e.target.id,
-		notEmpty = $('#textmsg').val() != '',
+		notEmpty = $.trim($('#textmsg').val()) != '',
 		isEnterKeypress = e.type == 'keypress' && e.keyCode == 13,
-		isSendClick = e.type == 'click' && id == 'sendbtn';
+		isSendClick = e.type == 'click' && e.data.isSendBtnClicked == 'true';
 
 	if( notEmpty && (isEnterKeypress || isSendClick) ) {
 		question = $.trim($('#textmsg').val())
