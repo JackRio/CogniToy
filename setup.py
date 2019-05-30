@@ -82,9 +82,9 @@ def sendMail(f_email,m_email,username):
 
 
 def PassReset(f_email,m_email,username):
-	token = emailKey.dumps(username,salt = 'email-confirm')
+	name = emailKey.dumps(username,salt = 'email-confirm')
 	msg = Message('Password Reset',sender = 'jrjarvisverify@gmail.com',recipients = [f_email,m_email])
-	link = url_for('reset',token = token,_external = True)
+	link = url_for('reset',token = name,_external = True)
 
 	msg.body = """Click the link here to change the password {}""".format(link)
 	mail.send(msg)	
@@ -335,7 +335,7 @@ class resetpassword(Form):
 	])
 	confirm = PasswordField(' Confirm Password',[validators.DataRequired()])
 
-@app.route('/resetMethod')
+@app.route('/resetMethod/< string: name>')
 def resetMethod(name):
 	cur = mysql.connection.cursor()
 	result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [name])
