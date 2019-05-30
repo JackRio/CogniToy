@@ -335,7 +335,7 @@ class resetpassword(Form):
 	])
 	confirm = PasswordField(' Confirm Password',[validators.DataRequired()])
 
-@app.route('/resetMethod/< string: name>')
+@app.route('/resetMethod/<string:name>')
 def resetMethod(name):
 	cur = mysql.connection.cursor()
 	result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [name])
