@@ -40,7 +40,7 @@ function appendUserChat(string) {
 function appendBotChat(string) {
 	$('#textmsg').val('');
 	var dt = new Date();
-	var time = dt.toLocaleTimeString();
+	var time = dt.getHours()+':'+dt.getMinutes();
 	var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">'+time+'</span></div></div>';
 	if(localStorage.history) {
 		localStorage.history += txt;
