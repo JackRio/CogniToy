@@ -87,95 +87,52 @@
 
   <div class="row">
     <nav class="col-sm-3">
-      <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="40">
-        <li><a href="#section1">Section 1       12/11/18</a></li>
-        <li><a href="#section2">Section 2       15/12/18</a></li>
-        <li><a href="#section3">Section 3       4/4/19</a></li>
+      <ul id="sections"class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="40">
+        <!-- {{section}} -->
       </ul>
     </nav>
-    <div class="col-sm-7 chat">   
-	<h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
+    <div class="col-sm-6 chat">   
+    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
     <hr style="margin:1px">
-	<div class=chatlog id = "section1">
+
+    <div class=chatlog id = "section1">
       
-    <div class ="logbox">
-      <div class="logcontainer ">
-        <p>Hello. How are you today?</p>
-        <span class="time">11:00</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Hey! I'm fine. Thanks for asking</p>
-        <span class="time">11:01</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Sweet! So, what do you wanna do today?</p>
-        <span class="time">11:02</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play socc</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-   </div>
-   <div class ="logbox">
-      <div class="logcontainer">
-        <p>Sweet! So, what do you wanna do today?</p>
-        <span class="time">11:02</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play socc</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-    </div>
-  
+      <!-- {{chat}} -->
   </div>
 <hr style="margin:2px">
 
 
+<script type="text/javascript">
 
+var log = {{chat}};
+var section = '';
+var chatbox = '';
+for(i in log)
+  {
+    section = section + '<li><a href = #section'+log[i].id+'>Section '+log[i].id+"  "+log[i].date+'</a></li>' ;
+    chatbox = chatbox + '<div class=chatlog id = "section'+log[i].id+'">'
+    for(j in log[i].chat)
+    {
+      
+      chatbox = chatbox + 
+
+    }
+    chatbox = chatbox + '</div>'
+
+  }  
+document.getElementById("sections").innerHTML = section;
+
+
+
+  console.log(chat[i].id)
+
+
+
+
+
+
+
+</script>
 
 
 {% endblock %}
