@@ -1,4 +1,4 @@
-$('#sendbtn').click(sendQuestion);
+$('#sendbtn').bind("click", {isSendBtnClicked: "true"}, sendQuestion);
 $('#textmsg').keypress(sendQuestion);
 
 var userSectionId = 0;
@@ -6,9 +6,9 @@ var botSectionId = 0;
 
 function sendQuestion(e) {
 	var id = e.target.id,
-		notEmpty = $('#textmsg').val() != '',
+		notEmpty = $.trim($('#textmsg').val()) != '',
 		isEnterKeypress = e.type == 'keypress' && e.keyCode == 13,
-		isSendClick = e.type == 'click' && id == 'sendbtn';
+		isSendClick = e.type == 'click' && e.data.isSendBtnClicked == 'true';
 
 	if( notEmpty && (isEnterKeypress || isSendClick) ) {
 		question = $.trim($('#textmsg').val())
@@ -21,7 +21,7 @@ function sendQuestion(e) {
 function appendUserChat(string) {
 	$('#textmsg').val('');
 	var dt = new Date();
-	var time = dt.toLocaleTimeString();
+	var time = dt.getHours()+':'+dt.getMinutes();
 
 	var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">'+time+'</span></div></div>';
 	if(localStorage.history) {
@@ -40,7 +40,7 @@ function appendUserChat(string) {
 function appendBotChat(string) {
 	$('#textmsg').val('');
 	var dt = new Date();
-	var time = dt.toLocaleTimeString();
+	var time = dt.getHours()+':'+dt.getMinutes();
 	var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">'+time+'</span></div></div>';
 	if(localStorage.history) {
 		localStorage.history += txt;
@@ -90,7 +90,7 @@ $(window).on('load', function() {
 				var datastr = dataArr.join()
 				for(var i = 0;i<dataArr.length;i++){
 					var dt = new Date();
-					var time = dt.toLocaleTimeString();
+					var time = dt.getHours()+':'+dt.getMinutes();
 					var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">'+time+'</span></div></div>';
 					if(localStorage.history) {
 						localStorage.history += txt;

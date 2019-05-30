@@ -441,10 +441,10 @@ def start():
 	string_temp = string[:-1]
 	
 	for _ in string_temp.split('$'):
-		chats = {'speaker': 'Bot','chat':_,'timestamp':datetime.now().strftime('%H:%M')}
+		chats = {'speaker': 'Bot','chat':_,'timestamp':datetime.now().strftime('%I:%M %p')}
 		g.chatArr.append(chats)
 	
-	g.startTime = datetime.now().strftime('%d:%b:%Y %H:%M')
+	g.startTime = datetime.now().strftime('%d:%b:%Y  %I:%M %p')
 
 	return string_temp
 
