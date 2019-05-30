@@ -90,7 +90,7 @@ $(window).on('load', function() {
 				var datastr = dataArr.join()
 				for(var i = 0;i<dataArr.length;i++){
 					var dt = new Date();
-					var time = dt.toLocaleTimeString();
+					var time = dt.getHours()+':'+dt.getMinutes();
 					var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">'+time+'</span></div></div>';
 					if(localStorage.history) {
 						localStorage.history += txt;
