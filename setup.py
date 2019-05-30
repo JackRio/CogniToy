@@ -80,6 +80,14 @@ def sendMail(f_email,m_email,username):
 	Click this link {}""".format(link)
 	mail.send(msg)
 
+
+def PassReset(f_email,m_email,username):
+	token = emailKey.dumps(username,salt = 'email-confirm')
+	msg = Message('Password Reset',sender = 'jrjarvisverify@gmail.com',recipients = [f_email,m_email])
+	link = url_for('reset',token = token,_external = True)
+
+	msg.body = """Click the link here to change the password {}""".format(link)
+	mail.send(msg)	
 # check login or not
 def is_logged_in(f):
     @wraps(f)
@@ -142,7 +150,6 @@ def chatlog():
 	sub = {}
 	chat = []
 	count = 1;
-	section=''
 	# <li><a href="#section1">Section 1       12/11/18</a></li>
 	for ele in logresult:
 		if ele['date']:
@@ -328,22 +335,31 @@ class resetpassword(Form):
 	])
 	confirm = PasswordField(' Confirm Password',[validators.DataRequired()])
 
-@app.route('/reset/<string:id>')
+@app.route('/resetMethod')
+def resetMethod(name):
+	cur = mysql.connection.cursor()
+	result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [name])
+	cur.close()
+	if result > 0:
+		mails = cur.fetchone()
+		PassReset(mails['f_email'],mails['m_email'],name)
+
+@app.route('/reset/<string:_id>')
 @is_logged_out
-def reset(id):
+def reset(_id):
 	form = resetpassword(request.form)
 	cur = mysql.connection.cursor()
 
 	if request.method == 'POST' and form.validate():
 		password = sha256_crypt.encrypt(str(form.password.data))
 		try:
-			username = emailKey.loads(token, salt ='email-confirm', max_age = 300)
+			username = emailKey.loads(_id, salt ='email-confirm', max_age = 300)
 		except SignatureExpired:
 			result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [username])
 			cur.close()
 			if result > 0:
 				mails = cur.fetchone()
-				sendMail(mails['f_email'],mails['m_email'],username)
+				PassReset(mails['f_email'],mails['m_email'],username)
 			flash('Link has expired, reset password with new link. Verify within 5 min.','error')
 			return redirect(url_for('index'))
 		except BadTimeSignature:
@@ -398,14 +414,15 @@ def askRiddle(response):
 	g.res += result[num][0] +'$'
 
 def giveDefine(response):
-	
-	respond= ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
-	i = random.randint(0,len(respond)-1)
-	if(response["output"]["entities"]):
-		answer = Scraping.search( response )
-		g.res += answer
-		if (random.uniform(0,1) > 0.65):
-			g.res += respond[i]
+	if response['context']['skills']['main skill']['user_defined']['foul']:
+		respond= ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
+		i = random.randint(0,len(respond)-1)
+		if(response["output"]["entities"]):
+			answer = Scraping.search( response )
+			g.res += answer
+			if (random.uniform(0,1) > 0.65):
+				g.res += respond[i]
+	response['context']['skills']['main skill']['user_defined']['foul'] = False
 
 
 def appendChatLog(child,bot):
