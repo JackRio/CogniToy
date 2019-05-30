@@ -78,7 +78,7 @@ def sendMail(f_email,m_email,username):
 	msg.body = 'Verification link is {}'.format(link)
 	mail.send(msg)
 
-# games
+# check login or not
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -89,6 +89,17 @@ def is_logged_in(f):
             return redirect(url_for('login'))
     return wrap
 
+def is_logged_out(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if not 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('You are already logged in', 'danger')
+            return redirect(url_for('index'))
+    return wrap
+
+# games
 @app.route('/games/<string:id>/')
 @is_logged_in
 def games(id):
@@ -114,6 +125,7 @@ def chat():
     return render_template('chat.html')
 
 @app.route('/chatlog/<string:id>')
+@is_logged_in
 def ChatLogId(id):
 	for ele in g.resultatlas:
 		if ele['_id'] == id:
@@ -160,6 +172,7 @@ class RegisterForm(Form):
     
 # User Register
 @app.route('/register', methods=['GET', 'POST'])
+@is_logged_out
 def register():
 	form = RegisterForm(request.form)
 	if request.method == 'POST' and form.validate():
@@ -196,7 +209,7 @@ def register():
 		
 		sendMail(f_email,m_email,username)
 		flash('Registration Succefully,Verify email within 30 min to login', 'success')
-		return redirect(url_for('home'))
+		return redirect(url_for('index'))
 	else:
 		if request.method == 'POST' and not form.validate():
 			error = 'Some error occured'
@@ -206,6 +219,7 @@ def register():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@is_logged_out
 def login():
 	if request.method == 'POST':
 		# Get Form Fields
@@ -273,19 +287,9 @@ def confirm_email(token):
 	mysql.connection.commit()
 	cur.close()
 	flash('Linked verified login to continue', 'success')
-    return redirect(url_for('login'))
+	return redirect(url_for('login'))
 
 
-# Check if user logged in
-def is_logged_in(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('Unauthorized, Please login', 'danger')
-            return redirect(url_for('login'))
-    return wrap
 
 # Logout
 @app.route('/logout')

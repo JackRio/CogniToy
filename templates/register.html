@@ -1,17 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<script>
-document.getElementById("sec_page").style.display = "none";
-</script>
-  
     <!-- <h1 onload="firstDisplay()">Register</h1> -->
     {% from "includes/_formhelpers.html" import render_field %}
     <form method="POST" action="" >
       <div class ="col-sm-12 jumbotron">
         <h1 onload="firstDisplay()">Register</h1>
         <div id="firstpage">
-          <div class =col-sm-6>
+          <!-- <div class =col-sm-6> -->
             <div class="form-group">
               {{render_field(form.f_name, class_="form-control")}}
             </div>
@@ -21,8 +17,8 @@ document.getElementById("sec_page").style.display = "none";
             <div class="form-group">
               {{render_field(form.f_contact, class_="form-control")}}
             </div>
-          </div>
-          <div class =col-sm-6>
+          <!-- </div> -->
+          <!-- <div class =col-sm-6> -->
             <div class="form-group">
               {{render_field(form.m_name, class_="form-control")}}
             </div>
@@ -32,7 +28,7 @@ document.getElementById("sec_page").style.display = "none";
             <div class="form-group">
               {{render_field(form.m_contact, class_="form-control")}}
             </div>
-          </div>
+          <!-- </div> -->
           <div class="form-group">
             {{render_field(form.Address, class_="form-control")}}
           </div>
