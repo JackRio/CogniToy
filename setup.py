@@ -72,10 +72,12 @@ sec_q=[("phone no.","Which phone number do you remember most from your childhood
 def sendMail(f_email,m_email,username):
 	token = emailKey.dumps(username,salt = 'email-confirm')
 
-	msg = Message('Confirm Email',sender = 'jrjarvisverify@gmail.com',recipients = [f_email,m_email])
+	msg = Message('Verification Email',sender = 'jrjarvisverify@gmail.com',recipients = [f_email,m_email])
 	link = url_for('confirm_email',token = token,_external = True)
 
-	msg.body = 'Verification link is {}'.format(link)
+	msg.body = """Thanks for registering on our website
+	To login click the link below
+	Click this link {}""".format(link)
 	mail.send(msg)
 
 # check login or not
@@ -347,7 +349,7 @@ def askRiddle(response):
 	g.res += result[num][0] +'$'
 
 def giveDefine(response):
-
+	
 	respond= ['Did you understand champ?','Was this answer good enough','This is what i know, did you get the answer?']
 	i = random.randint(0,len(respond)-1)
 	if(response["output"]["entities"]):
