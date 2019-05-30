@@ -21,7 +21,7 @@ function sendQuestion(e) {
 function appendUserChat(string) {
 	$('#textmsg').val('');
 	var dt = new Date();
-	var time = dt.toLocaleTimeString();
+	var time = dt.getHours()+':'+dt.getMinutes();
 
 	var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">'+time+'</span></div></div>';
 	if(localStorage.history) {
