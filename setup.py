@@ -79,31 +79,21 @@ def sendMail(f_email,m_email,username):
 	mail.send(msg)
 
 # games
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for('login'))
+    return wrap
+
 @app.route('/games/<string:id>/')
+@is_logged_in
 def games(id):
 	gm = "games/"+str(id)+".html"
 	return render_template(gm)
-
-
-# @app.route('/g_sequence')
-# def g_sequence():
-#     return render_template('g_sequence.html')
-
-# @app.route('/g_upbeat')
-# def g_upbeat():
-#     return render_template('g_up-beat.html')
-
-# # games
-# @app.route('/g_poll')
-# def g_poll():
-#     return render_template('g_poll.html')
-
-
-# # games
-# @app.route('/g_bloxorz')
-# def g_bloxorz():
-#     return render_template('g_bloxorz.html')
-
 
 
 
@@ -119,6 +109,7 @@ def about():
 
 
 @app.route('/chat')
+@is_logged_in
 def chat():
     return render_template('chat.html')
 
@@ -131,6 +122,7 @@ def ChatLogId(id):
 
 
 @app.route('/chatlog')
+@is_logged_in
 def chatlog():
 	trim = []
 	sub = {}
@@ -145,7 +137,7 @@ def chatlog():
 
 # Register Form Class
 class RegisterForm(Form):
-    f_name = StringField(' Father Name', [validators.Length(min = 3, max=50,message="Invalid Name")])
+    f_name = StringField(' Father Name')#, [validators.Length(min = 3, max=50,message="Invalid Name")])
     f_contact = IntegerField(' Father Contact No.')#,[validators.Length(min = 10, max=13,message="Enter valid Contact no.(10-13 digit)")])
     f_email = StringField(' Father Email Id', [validators.Email()])
     
@@ -194,7 +186,7 @@ def register():
 		    error = "Username not available, please choose another"
 		    return render_template('register.html',error = error,form=form)
 		# Execute query
-		cur.execute("INSERT INTO parent(`username`, `password`, `f_name`, `f_email`, `f_contact`, `m_name`, `m_email`, `m_contact`, `Sec_Q`, `Sec_A`,`address`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)", (username, password, f_name, f_email, f_contact, m_name, m_email, m_contact, Sec_Q, Sec_A,Address))
+		cur.execute("INSERT INTO parent(`username`, `password`, `f_name`, `f_email`, `f_contact`, `m_name`, `m_email`, `m_contact`, `Sec_Q`, `Sec_A`,`address`,`verified`) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s,0)", (username, password, f_name, f_email, f_contact, m_name, m_email, m_contact, Sec_Q, Sec_A,Address))
 
 		# Commit to DB
 		mysql.connection.commit()
@@ -203,8 +195,8 @@ def register():
 		cur.close()
 		
 		sendMail(f_email,m_email,username)
-		flash('Registration Succefully,Verify email to login', 'success')
-		return redirect(url_for('/'))
+		flash('Registration Succefully,Verify email within 30 min to login', 'success')
+		return redirect(url_for('home'))
 	else:
 		if request.method == 'POST' and not form.validate():
 			error = 'Some error occured'
@@ -212,69 +204,21 @@ def register():
 		return render_template('register.html', form=form)
 
 
-# class ChildDetail(Form):
-#     fname = StringField('First Name', [validators.Length(min =1, max=50)])
-#     # lname = StringField('Last Name', [validators.Length(min =1, max=50)])
-#     # #nickname = StringField('Nick Name', [validators.Length( max=50)])
-#     # dob = DateTimeField('Birthday', format='%d/%m/%y')
-#     # gender = RadioField('Gender', choices = [('M','Male'),('F','Female')])
-#     # grade = SelectField('Grade', choices = [('KinderGarden'),('1st'),('2nd'),('3rd'),('4th'),('5th'),('6th'),('7th'),('8th'),('9th')])
-# # User login
 
-# @app.route('/childdetail', methods=['GET', 'POST'])
-# def childdetail():
-#     # render_template('childdetails.html')
-#     form1 = ChildDetail(request.form)
-#     if request.method == 'POST' and form.validate():
-#         fname = form.fname.data
-#         # lname = form.lname.data
-#         # #nickname = form.nickname.data
-#         # # dob = form.dob.data
-#         # gender = form.gender.data
-#         # grade = form.garde.data
-#         return redirect(url_for('home')) 
-#     return render_template('childdetails.html',form=form1)
-# User login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        # Get Form Fields
-        username = request.form['username']
-        password_candidate = request.form['password']
-        if len(username) == 0:
-            error = 'Username is empty'
-            return render_template('login.html', error=error)
-        elif len(password_candidate) == 0:
-            error = 'Password is empty'
-            return render_template('login.html', error=error)
-        # Create cursor
-        cur = mysql.connection.cursor()
-
-        # Get user by username
-        result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
-
-        if result > 0:
-            # Get stored hash
-            data = cur.fetchone()
-            password = data['password']
-
-            # Compare Passwords
-            if sha256_crypt.verify(password_candidate, password):
-                # Passed
-                session['logged_in'] = True
-                session['username'] = username
-
-                flash('You are now logged in', 'success')
-                return redirect(('chat'))
-            else:
-                error = 'Invalid Password'
-                return render_template('login.html', error=error)
-            # Close connection
-            cur.close()
-        else:
-            error = 'Username not found'
-            return render_template('login.html', error=error)
-
+	if request.method == 'POST':
+		# Get Form Fields
+		username = request.form['username']
+		password_candidate = request.form['password']
+		if len(username) == 0:
+			error = 'Username is empty'
+			return render_template('login.html', error=error)
+		elif len(password_candidate) == 0:
+			error = 'Password is empty'
+			return render_template('login.html', error=error)
+		# Create cursor
+		cur = mysql.connection.cursor()
 		# Get user by username
 		result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
 		data = cur.fetchone()
@@ -297,7 +241,7 @@ def login():
 					error = 'Invalid Password'
 					return render_template('login.html', error=error)
 			else:
-				sendMail(data['f_email'],data['m_email'],username)
+				#sendMail(data['f_email'],data['m_email'],username)
 				error = 'Email not verified'
 				return render_template('login.html', error=error)
 
@@ -309,24 +253,28 @@ def login():
 
 	return render_template('login.html')
 
-@app.route('/login/<token>')
+@app.route('/login/<string:token>')
 def confirm_email(token):
 	try:
 		username = emailKey.loads(token, salt ='email-confirm', max_age = 3600)
 	except SignatureExpired:
 		cur = mysql.connection.cursor()
 		result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [username])
-		
+		cur.close()
 		if result > 0:
 			mails = cur.fetchone()
 			sendMail(mails['f_email'],mails['m_email'],username)
-		
-		return '<h1> Link has expired sending it again, Verify new link within 30 minutes</h1>'
+		flash('Link has expired sending it again, Verify new link within 30 minutes','error')
+		return redirect(url_for('home'))
 	except BadTimeSignature:
-		return'<h1>Link is incorrect</h1>'
+		flash('Invalid link','error')
+		return redirect(url_for('home'))
 	cur.execute("UPDATE parent SET verified = 1 WHERE username = %s",[username])
-	success = "Linked verified login to continue"
-	return render_template('login.html',success)
+	mysql.connection.commit()
+	cur.close()
+	flash('Linked verified login to continue', 'success')
+    return redirect(url_for('login'))
+
 
 # Check if user logged in
 def is_logged_in(f):
@@ -341,14 +289,15 @@ def is_logged_in(f):
 
 # Logout
 @app.route('/logout')
-# @is_logged_in
+@is_logged_in
 def logout():
-	session.clear()
+	
 	log = {
 	'username': session['username'],
 	'date':g.startTime,
 	'Chat': g.chatArr
 	}
+	session.clear()
 	records.insert_one(log)
 
 	g.chatArr,g.startTime = [],''
