@@ -55,7 +55,7 @@ mark{
     <hr style="margin:1px">
 
     <div class=chatlog id = 'chatlog' >
-      
+      <h3><center><mark>No chats found</mark></center></h3>
       <!-- {{chat}} -->
   </div>
 <hr style="margin:2px">
@@ -66,29 +66,31 @@ mark{
 var log = {{chat}};
 var section = '';
 var chatbox = '';
-for(i in log)
-  {
-    section = section + '<li><a class="section" href = #section'+log[i].id+'>Session '+log[i].id+"    "+log[i].date+'</a></li>' ;
-    chatbox = chatbox + '<div  id = "section'+log[i].id+'"><center><mark>'+log[i].date+'</mark></center>'
-
-    for(j in log[i].chat)
+if(log[0].id)
+{
+  for(i in log)
     {
+      section = section + '<li><a class="section" href = #section'+log[i].id+'>Session '+log[i].id+"    "+log[i].date+'</a></li>' ;
+      chatbox = chatbox + '<div  id = "section'+log[i].id+'"><center><mark>'+log[i].date+'</mark></center>'
 
-      if(log[i].chat[j].speaker=='Bot'){
-        chatbox = chatbox +'<div class ="logbox"><div class="logcontainer "><p>'+log[i].chat[j].chat+'</p><span class="time">'+log[i].chat[j].timestamp+'</span></div></div>';
+      for(j in log[i].chat)
+      {
 
+        if(log[i].chat[j].speaker=='Bot'){
+          chatbox = chatbox +'<div class ="logbox"><div class="logcontainer "><p>'+log[i].chat[j].chat+'</p><span class="time">'+log[i].chat[j].timestamp+'</span></div></div>';
+
+        }
+        else{
+          chatbox = chatbox + '<div class ="logbox"><div class="logcontainer child"><p>'+log[i].chat[j].chat+' </p><span class="time">'+log[i].chat[j].timestamp+'</span></div></div>';
+          
+        }
       }
-      else{
-        chatbox = chatbox + '<div class ="logbox"><div class="logcontainer child"><p>'+log[i].chat[j].chat+' </p><span class="time">'+log[i].chat[j].timestamp+'</span></div></div>';
-        
-      }
-    }
-    chatbox = chatbox + '</div>'
+      chatbox = chatbox + '</div>'
 
-  }  
-document.getElementById("sections").innerHTML = section;
-document.getElementById("chatlog").innerHTML = chatbox;
-
+    }  
+  document.getElementById("sections").innerHTML = section;
+  document.getElementById("chatlog").innerHTML = chatbox;
+}
 
 
 

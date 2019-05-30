@@ -82,9 +82,9 @@ def sendMail(f_email,m_email,username):
 
 
 def PassReset(f_email,m_email,username):
-	name = emailKey.dumps(username,salt = 'email-confirm')
+	token = emailKey.dumps(username,salt = 'email-confirm')
 	msg = Message('Password Reset',sender = 'jrjarvisverify@gmail.com',recipients = [f_email,m_email])
-	link = url_for('reset',token = name,_external = True)
+	link = url_for('reset',token = token,_external = True)
 
 	msg.body = """Click the link here to change the password {}""".format(link)
 	mail.send(msg)	
@@ -313,20 +313,48 @@ def confirm_email(token):
 @app.route('/logout')
 @is_logged_in
 def logout():
-	
-	log = {
-	'username': session['username'],
-	'date':g.startTime,
-	'Chat': g.chatArr
-	}
+	if len(g.chatArr)>2:
+		log = {
+		'username': session['username'],
+		'date':g.startTime,
+		'Chat': g.chatArr
+		}
+		records.insert_one(log)
 	session.clear()
-	records.insert_one(log)
+	
 
 	g.chatArr,g.startTime = [],''
 
 	flash('You are now logged out', 'success')
 	return redirect(url_for('login'))
 # reset password
+
+
+@app.route('/reset', methods=['GET', 'POST'])
+@is_logged_out
+def resetPass():
+	print("aaaa")
+
+	if request.method == 'POST':
+		# Get Form Fields
+		print("aaaa")
+		username = request.form['username']
+		if len(username) == 0:
+			error = 'Please Enter username first'
+			return render_template('resetuser.html',error = error)
+		cur = mysql.connection.cursor()
+		# Get user by username
+		result = cur.execute("SELECT * FROM parent WHERE username = %s", [username])
+		if result > 0:
+			mails = cur.fetchone()
+			PassReset(mails['f_email'],mails['m_email'],username)
+			flash("Reset password link send",'success')
+			return redirect(url_for('index'))
+		else:
+			error = "Username not found"
+			return render_template('resetuser.html',error = error)
+	return render_template('resetuser.html')
+
 class resetpassword(Form):
 	password = PasswordField(' Password', [
 		validators.Length(min=4, max=20),
@@ -335,36 +363,23 @@ class resetpassword(Form):
 	])
 	confirm = PasswordField(' Confirm Password',[validators.DataRequired()])
 
-@app.route('/resetMethod/<string:name>')
-def resetMethod(name):
-	cur = mysql.connection.cursor()
-	result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [name])
-	cur.close()
-	if result > 0:
-		mails = cur.fetchone()
-		PassReset(mails['f_email'],mails['m_email'],name)
-
-@app.route('/reset/<string:_id>')
+@app.route('/reset/<string:token>', methods=['GET', 'POST'])
 @is_logged_out
-def reset(_id):
+def reset(token):
 	form = resetpassword(request.form)
 	cur = mysql.connection.cursor()
 
 	if request.method == 'POST' and form.validate():
 		password = sha256_crypt.encrypt(str(form.password.data))
 		try:
-			username = emailKey.loads(_id, salt ='email-confirm', max_age = 300)
+			username = emailKey.loads(token, salt ='email-confirm', max_age = 300)
 		except SignatureExpired:
-			result = cur.execute("SELECT f_email,m_email FROM parent WHERE username = %s", [username])
-			cur.close()
-			if result > 0:
-				mails = cur.fetchone()
-				PassReset(mails['f_email'],mails['m_email'],username)
-			flash('Link has expired, reset password with new link. Verify within 5 min.','error')
-			return redirect(url_for('index'))
+			flash('Link has expired,generate new link.','error')
+			return redirect(url_for('resetPass'))
 		except BadTimeSignature:
 			flash('Invalid link','error')
 			return redirect(url_for('index'))
+		
 		cur.execute("UPDATE parent SET password = %s WHERE username = %s",(password,username))
 		mysql.connection.commit()
 		cur.close()
