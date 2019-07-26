@@ -17,7 +17,7 @@
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">
+      <div onload="setTimeout()" class="alert alert-{{ category }}">
       {{ message }}
         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
       </div>
@@ -26,19 +26,24 @@
 {% endwith %}
 
 {% if error %}
-  <div class="alert alert-danger">
+  <div onload="setTimeout()" class="alert alert-danger">
   {{error}}
     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
   </div>
 {% endif %}
 
 {% if msg %}
-  <div class="alert alert-success">
+  <div onload="setTimeout()" class="alert alert-success">
   {{msg}}
     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
   </div>
 {% endif %}
 
+<script type="text/javascript">
+  setTimeout(function() {
+    $('.alert').fadeOut('fast');
+}, 5000)
+</script>
 
 
 

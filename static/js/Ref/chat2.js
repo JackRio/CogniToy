@@ -19,8 +19,8 @@ function sendQuestion(e) {
 
 function appendUserChat(string) {
 	if($('.chatlogs').children().last().attr('class') == 'chat bot'){
-		var txt = '<div class="chat self" id="UserSection'+ ++userSectionId +'"><div class="UserPic"><img src="img/user.png"></div><p class="chat-message">' + string + '</p></div>';
-		$('.chatlogs').append(txt);
+		var txt = '<div class ="logbox"><div class="logcontainer child"><p>'+string+' </p><span class="time">11:01</span></div></div>';
+		$('.chatlog').append(txt);
 	} else {
 		var txt = '<p class=\"chat-message\">' + string + '</p>';
 		$('#UserSection'+ userSectionId).append(txt);
@@ -31,8 +31,8 @@ function appendUserChat(string) {
 
 function appendBotChat(string) {
 	if($('.chatlogs').children().last().attr('class') == 'chat self'){
-		var txt = '<div class="chat bot" id="BotSection'+ ++botSectionId +'"><div class="BotPic"><img src="img/bot.png"></div><p class="chat-message">' + string + '</p></div>';
-		$('.chatlogs').append(txt);
+		var txt = '<div class ="logbox"><div class="logcontainer "><p>'+string+'</p><span class="time">11:00</span></div></div>';
+		$('.chatlog').append(txt);
 	} else {
 		var txt = '<p class=\"chat-message\">' + string + '</p>';
 		$('#BotSection'+ botSectionId).append(txt);
@@ -47,7 +47,7 @@ function appendBotChat(string) {
 
 function getResponse(string) {
 	$.ajax({
-		url: 'http://127.0.0.1:5000/conversation',
+		url: 'https://jrjarvis.herokuapp.com/conversation',
 		headers: {
 			'Content-Type':'application/json'
 		},
@@ -70,13 +70,13 @@ function getResponse(string) {
 
 $(window).on('load', function() {
 	$.ajax({
-		url: 'http://127.0.0.1:5000/start'
+		url: 'https://jrjarvis.herokuapp.com/start'
 	}).always( function(data) {
 		if(data != ''){
 			var dataArr = data.split('$')
 			for(var i = 0;i<dataArr.length;i++){
-				var txt = '<div class="chat bot" id="BotSection0"><div class="BotPic"><img src="img/bot.png"></div><p class="chat-message">' + dataArr[i] + '</p></div>';
-				$('.chatlogs').append(txt);
+				var txt = '<div class ="logbox"><div class="logcontainer "><p>'+dataArr[i]+'</p><span class="time">11:00</span></div></div>';
+				$('.chatlog').append(txt);
 			}
 		}
 	});

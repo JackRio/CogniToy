@@ -6,175 +6,98 @@
 
 
 {% block body %}
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/chat.css') }}">
 <style>
-    .affix {
-    top: 25px;
-    z-index: 9999 !important;
-  }
-  .chat{
-        border: 1px #3D3837;
-         background-image:url("static/kindergarten.jpg");
-        border-radius:6px;
-        padding: 4px;
-        margin: 5px 0;
-		    margin-top:0;
-        height:560px;          
-        }
-        .chatlog{
-        height:515px; 
-		    padding:3px;
-        overflow-x: hidden;
-        overflow-y: scroll;
-       
-      
-		   }
-      
-      .chatlog::-webkit-scrollbar{
-        width:10px;
-
-        
+.chatlog{
+        height:520px;
       }
-      .logbox{
-      	display: table;
-      	width: 100%;
-
-      }
-
-      .chatlog::-webkit-scrollbar-thumb{
-        border-radius: 5px;
-        background: rgba(0,0,0,.2)
-        
-      }
-      
-    .logcontainer {
-      border: 2px solid #dedede;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 3px;
-      margin: 5px 0;
-      max-width: 80%;
-      display: table;
-      float:left;
-
-	     
-    }
-
-    .child {
-      border-color: #ccc;
-      background-color: #ddd;
-      text-align: right;
-      float:right;
-
-    }
-
-
-    .logcontainer::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-
+mark{
     
+    font-family:courier;
+    
+    background-color: #333333db;
+    color: #fcf8e3;
+    border-radius: 3px;
+    padding: 2px;
+    
+      }
 
-    .time {
-      float: right;
-      color: #aaa;
-    }
-  		
-		</style>
+.section:link {
+  color: black; 
+  background-color: transparent; 
+  text-decoration: none;
+}
+
+.section:visited {
+  color: black;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+
+.section:active {
+  color: gray;
+  background-color: transparent;
+  text-decoration: underline;
+}
+</style>
 
 
   <div class="row">
-    <nav class="col-sm-2">
-      <ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="40">
-        <li><a href="#section1">Section 1</a></li>
-        <li><a href="#section2">Section 2</a></li>
-        <li><a href="#section3">Section 3</a></li>
+    <nav class="col-sm-3">
+      <ul id="sections"class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="40">
+        <!-- {{section}} -->
       </ul>
     </nav>
-    <div class="col-sm-8 chat">   
-	<h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
+    <div class="col-sm-6 chat">   
+    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
     <hr style="margin:1px">
-	<div class=chatlog id = "section1">
-      
-    <div class ="logbox">
-      <div class="logcontainer ">
-        <p>Hello. How are you today?</p>
-        <span class="time">11:00</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!Hey! I'm fine. Thanks for asking!</p>
-        <span class="time">11:01</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Sweet! So, what do you wanna do today?</p>
-        <span class="time">11:02</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play socc</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-   </div>
-   <div class ="logbox">
-      <div class="logcontainer">
-        <p>Sweet! So, what do you wanna do today?</p>
-        <span class="time">11:02</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play socc</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer child">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-  </div>
-  <div class ="logbox">
-      <div class="logcontainer">
-        <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-        <span class="time">11:05</span>
-      </div>
-    </div>
-    <hr style="margin:1px">
+
+    <div class=chatlog id = 'chatlog' >
+      <h3><center><mark>No chats found</mark></center></h3>
+      <!-- {{chat}} -->
   </div>
 <hr style="margin:2px">
 
 
+<script type="text/javascript">
 
+var log = {{chat}};
+var section = '';
+var chatbox = '';
+if(log[0].id)
+{
+  for(i in log)
+    {
+      section = section + '<li><a class="section" href = #section'+log[i].id+'>Session '+log[i].id+"    "+log[i].date+'</a></li>' ;
+      chatbox = chatbox + '<div  id = "section'+log[i].id+'"><center><mark>'+log[i].date+'</mark></center>'
+
+      for(j in log[i].chat)
+      {
+
+        if(log[i].chat[j].speaker=='Bot'){
+          chatbox = chatbox +'<div class ="logbox"><div class="logcontainer "><p>'+log[i].chat[j].chat+'</p><span class="time">'+log[i].chat[j].timestamp+'</span></div></div>';
+
+        }
+        else{
+          chatbox = chatbox + '<div class ="logbox"><div class="logcontainer child"><p>'+log[i].chat[j].chat+' </p><span class="time">'+log[i].chat[j].timestamp+'</span></div></div>';
+          
+        }
+      }
+      chatbox = chatbox + '</div>'
+
+    }  
+  document.getElementById("sections").innerHTML = section;
+  document.getElementById("chatlog").innerHTML = chatbox;
+}
+
+
+
+
+
+
+</script>
 
 
 {% endblock %}

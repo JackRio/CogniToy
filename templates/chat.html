@@ -1,176 +1,129 @@
 {% extends 'layout.html' %}
 {% block body %}
-<style>
-  .speech {border: 1px solid #DDD; width: 300px; padding: 0; margin: 0}
-  .speech input {border: 0; width: 240px; display: inline-block; height: 30px;}
-  .speech img {float: right; width: 40px }
-
-        .chat{
-        border: 1px #3D3837;
-        /*background-image:url("static/kindergarten.jpg");*/
-        border-radius:6px;
-        padding: 4px;
-        margin: 5px 0;
-		    margin-top:0;
-        height:560px;          
-        }
-        .chatlog{
-        height:450px;
-		    padding:3px;
-        overflow-x: hidden;
-        overflow-y: scroll;
-       
-      
-		   }
-      
-      .chatlog::-webkit-scrollbar{
-        width:10px;
-
-        
-      }
-      .logbox{
-      	display: table;
-      	width: 100%;
-
-      }
-
-      .chatlog::-webkit-scrollbar-thumb{
-        border-radius: 5px;
-        background: rgba(0,0,0,.2)
-        
-      }
-      .chat-form{
-        display:flex;    
-  		align-items:flex-start;
-      }
-      .chat-form textarea{
-        height: 55px;
-        width:80%;
-        
-        border-radius: 5px;
-        margin-left: 10px;
-        margin-top: 5px;
-        overflow-x: hidden;
-        overflow-y: scroll;
-
-      }
-
-      .chat-form textarea::-webkit-scrollbar{
-        width:8px;
-
-        
-      }
-
-      .chat-form textarea::-webkit-scrollbar-thumb{
-        border-radius: 4px;
-        background: rgba(0,0,0,.3)
-        
-      }
-     
-      
-    .logcontainer {
-      border: 2px solid #dedede;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 3px;
-      margin: 5px 0;
-      max-width: 80%;
-      display: table;
-      float:left;
-
-	     
-    }
-
-    .child {
-      border-color: #ccc;
-      background-color: #ddd;
-      text-align: right;
-      float:right;
-
-    }
-
-
-    .logcontainer::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-
-    
-
-    .time {
-      float: right;
-      color: #aaa;
-    }
-
-    
-    
-  
-
-
-
-</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/husky.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/chat.css') }}">
 
 <div class="col-sm-4 chat" >   
-    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px">Chat</h3>
-    <hr style="margin:1px">
+    <h3 style="margin-bottom:0;margin-left:8px;margin-top: 2px;margin-right: 9px;">Chat
+    <!-- <label class=" switch">
+    	<h6><i><b style="">Mute</b></i></h6>
+		<input type="checkbox" >
+		<span class="slider round"></span>
+	</label>  -->
+  <button  style="float:right; background-color:transparent;outline: none; font-size:15px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i id ="audio" onclick="volumetoggle(this)" class="fas fa-volume-mute" style="font-size:20px; margin-left: 3px;"></i></button>
+
+  
+  
+
+	</h3>
+    <hr style="margin:2px">
 	<div class="chatlog" > 
 	<!-- chat comes hear -->
 	</div>
-    <hr style="margin:1px">
-    <div class="chat-form" >
-      <textarea id = 'textmsg' placeholder="Enter Message"></textarea>
-      <button id = 'sendbtn' style="width: 14%;margin: 3px;border-radius: 3px">
-      <span class="glyphicon glyphicon-send" style="font-size:25px;"></span>
-      send</button>
-      <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
-
-      <!-- <div class="col-sm-6 speech">
-        <input type="text" name="q" id="textmsg" placeholder="Speak" />
-        <img onclick="startDictation()" src={{url_for('static', filename="cHidSVu.gif")}} />
-      </div> -->
+    <hr style="margin:2px">
+    <div class="chat-form" style="background-color:#FFFFFF; border-radius: 20px;padding-left: 3px;">
+      <textarea id = 'textmsg' name = 'q' placeholder="Enter Message"></textarea>
+       <!-- <button onclick="startDictation()" style="background-color:transparent; font-size:24px;padding-left: 0px;padding-right: 0px;border-right-width: 0px;border-top-width: 0px;border-left-width: 0px;border-bottom-width: 0px;padding-top: 0px;margin-top: 5px;"><i id ="mic"class="fas fa-microphone" style="font-size:25px; margin-top: 10px;margin-left: 3px;margin-right: 2px"></i></button> 
+       -->
+       <button onclick="startDictation()" style="background-color: transparent;outline: none; border: 0; margin-top: 8px; margin-bottom:  8px; margin-left:0px;padding:0; border-radius: 11px;">
+        <img src="static/mic_off.png" id ="mic" style="font-size:26px;"> 
+      </button>
+      <button id="sendbtn" style="background-color: transparent; border: 0;outline: none; margin-top: 9px; margin-bottom:  9px;padding-left: 0; margin-left:0px; border-radius: 11px;">
+        <span class="glyphicon glyphicon-send" style="font-size:25px; padding-right: 5px; color: #000;"></span>
+      </button>
       <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+      <!-- <input onclick="responsiveVoice.speak('This is the text you want to speak');" type='button' value='🔊 Play' /> -->
 
     </div>
+   
+
+</div>
+<div class ="col-sm-1">
+  </div>
+<div class = "container2">
+
+  <div class ="col-sm-6 ChildrenHusk ">
+  <div class="husky">
+    <div class="mane">
+      <div class="coat"></div>
+    </div>
+    <div class="body">
+      <div class="head">
+        <div class="ear"></div>
+        <div class="ear"></div>
+        <div class="face">
+          <div class="eye"></div>
+          <div class="eye"></div>
+          <div class="nose"></div>
+          <div class="mouth">
+            <div class="lips"></div>
+            <div class="tongue"></div>
+          </div>
+        </div>
+      </div>
+      <div class="torso"></div>
+    </div>
+    <div class="legs">
+      <div class="front-legs">
+        <div class="leg"></div>
+        <div class="leg"></div>
+      </div>
+      <div class="hind-leg">
+      </div>
+    </div>
+    <div class="tail">
+      <div class="tail">
+        <div class="tail">
+          <div class="tail">
+            <div class="tail">
+              <div class="tail">
+                <div class="tail"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none">
+    <defs>
+
+      
+      <filter id="squiggly-0">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+        <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="2" />
+      </filter>
+      <filter id="squiggly-1">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="1"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+      </filter>
+      
+      <filter id="squiggly-2">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+      </filter>
+      <filter id="squiggly-3">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="3"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+      </filter>
+      
+      <filter id="squiggly-4">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" />
+      </filter>
+    </defs> 
+  </svg>
 </div>
 
+<script src='https://unpkg.com/@reactivex/rxjs@5.0.0-rc.1/dist/global/Rx.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/rxjs-dom/7.0.3/rx.dom.min.js'></script>
+<script src='https://unpkg.com/rxcss@0.9.0/dist/rxcss.min.js'></script>
+<!-- <script  src = "{{ url_for('static', filename = 'js/huskyjs.js') }}"></script> -->
 
 
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat.js') }}"></script>
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/husky.js') }}"></script>
 
-
-<!-- Search Form
-<form id="labnol" method="get" action="https://www.google.com/search"></form>-->
- 
-
-<!-- HTML5 Speech Recognition API -->
-<!-- <script type="text/javascript" src = "{{ url_for('static', filename = 'js/jquery.min.js') }}"></script> -->
-<script>
-  function startDictation() {
-
-    if (window.hasOwnProperty('webkitSpeechRecognition')) {
-
-      var recognition = new webkitSpeechRecognition();
-
-      recognition.continuous = false;
-      recognition.interimResults = false;
-
-      recognition.lang = "en-US";
-      recognition.start();
-
-      recognition.onresult = function(e) {
-        document.getElementById('textmsg').value
-                                 = e.results[0][0].textmsg;
-        recognition.stop();
-        <!-- document.getElementById('labnol').submit();-->
-      };
-
-      recognition.onerror = function(e) {
-        recognition.stop();
-      }
-
-    }
-  }
-</script>
-<script src='//vws.responsivevoice.com/v/e?key=3zb5p0HN'></script>
-<script type="text/javascript" src = "{{ url_for('static', filename = 'js/chat1.js') }}"></script>
 {% endblock %}

@@ -1,12 +1,98 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <div class="jumbotron text-center">
-    <h1>This is Jarvis</h1>
-    <p class="lead">hello buddy, Consider me your friend and I am hear to answer all your Quries </p>
-    {% if session.logged_in == NULL %}
-      <a href="/register" class="btn btn-primary btn-lg">Register</a>
-      <a href="/login" class="btn btn-success btn-lg">Login</a>
-    {% endif %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/husky.css') }}">
+
+  <div class="jumbotron text-center " style=" margin-bottom: 0px; padding-bottom: 250px" >
+
+<div >
+  <div class =" ChildrenHusk " style="padding-bottom: 15px;    padding-top: 0px;" >
+  <div class="husky">
+    <div class="mane">
+      <div class="coat"></div>
+    </div>
+    <div class="body">
+      <div class="head">
+        <div class="ear"></div>
+        <div class="ear"></div>
+        <div class="face">
+          <div class="eye"></div>
+          <div class="eye"></div>
+          <div class="nose"></div>
+          <div class="mouth">
+            <div class="lips"></div>
+            <div class="tongue"></div>
+          </div>
+        </div>
+      </div>
+      <div class="torso"></div>
+    </div>
+    <div class="legs">
+      <div class="front-legs">
+        <div class="leg"></div>
+        <div class="leg"></div>
+      </div>
+      <div class="hind-leg"></div>
+    </div>
+    <div class="tail">
+      <div class="tail">
+        <div class="tail">
+          <div class="tail">
+            <div class="tail">
+              <div class="tail">
+                <div class="tail"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none">
+    <defs>
+
+      
+      <filter id="squiggly-0">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="0"/>
+        <feDisplacementMap id="displacement" in="SourceGraphic" in2="noise" scale="2" />
+      </filter>
+      <filter id="squiggly-1">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="1"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+      </filter>
+      
+      <filter id="squiggly-2">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="2"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+      </filter>
+      <filter id="squiggly-3">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="3"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+      </filter>
+      
+      <filter id="squiggly-4">
+        <feTurbulence id="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" seed="4"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" />
+      </filter>
+    </defs> 
+  </svg>
+	</div>
+</div>
+	<div >
+	    <h1>This is Jarvis</h1>
+	    <p class="lead">Hello buddy, Consider me your friend and I am hear to answer all your Quries </p>
+	    {% if session.logged_in == NULL %}
+	      <a href="/register" class="btn btn-primary btn-lg">Register</a>
+	      <a href="/login" class="btn btn-success btn-lg">Login</a>
+	    {% endif %}
+	</div>
+  </div>
+
+<script src='https://unpkg.com/@reactivex/rxjs@5.0.0-rc.1/dist/global/Rx.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/rxjs-dom/7.0.3/rx.dom.min.js'></script>
+<script src='https://unpkg.com/rxcss@0.9.0/dist/rxcss.min.js'></script>
+
+<script type="text/javascript" src = "{{ url_for('static', filename = 'js/husky.js') }}"></script>
+
 {% endblock %}
