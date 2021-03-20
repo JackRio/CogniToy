@@ -15,7 +15,7 @@ impyute==0.0.7
 inflect==2.1.0
 itsdangerous==1.1.0
 jaraco.itertools==4.4.2
-Jinja2==2.10
+Jinja2==2.11.3
 kiwisolver==1.0.1
 lxml==4.3.2
 MarkupSafe==1.1.1
