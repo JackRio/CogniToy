@@ -25,7 +25,7 @@ mysql==0.0.2
 mysql-connector==2.1.6
 mysql-connector-python==8.0.15
 mysqlclient==1.4.2.post1
-numpy==1.16.2
+numpy==1.22.0
 pandas==0.24.2
 passlib==1.7.1
 pymongo==3.8.0
